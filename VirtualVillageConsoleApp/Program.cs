@@ -35,6 +35,8 @@ internal class Program
         var agent = new Agent { Name = "Bob" };
         agent.State.Set("hunger", 0);
         agent.State.Set("food", 0);
+        agent.Goals.Add(new SatiateHungerGoal());
+        agent.Goals.Add(new IdleGoal());
         sim.Agents.Add(agent);
 
         var tree = new Item { Name = "Tree", Position = new Position(10, 10) };
