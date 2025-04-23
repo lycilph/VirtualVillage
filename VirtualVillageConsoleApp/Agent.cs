@@ -1,4 +1,6 @@
-﻿namespace VirtualVillageConsoleApp;
+﻿using VirtualVillageConsoleApp.Actions;
+
+namespace VirtualVillageConsoleApp;
 
 public class Agent
 {
@@ -16,7 +18,7 @@ public class Agent
 
     public void Update()
     {
-        State.Set("hunger", State["hunger"] + 1);
+        //State.Set("hunger", State["hunger"] + 1);
     }
 
     public void Render()

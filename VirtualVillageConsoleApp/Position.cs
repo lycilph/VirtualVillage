@@ -1,6 +1,6 @@
 ﻿namespace VirtualVillageConsoleApp;
 
-public struct Position(double x, double y)
+public readonly struct Position(double x, double y)
 {
     public double X { get; } = x;
     public double Y { get; } = y;
