@@ -1,4 +1,5 @@
 ﻿using VirtualVillageConsoleApp.Goap;
+using VirtualVillageConsoleApp.Simulation;
 
 namespace VirtualVillageConsoleApp;
 
@@ -12,6 +13,7 @@ internal class Program
                 {
                     Name = "Chop Wood",
                     Cost = 4,
+                    Position = new(5, 5), // Should be update to the nearest tree
                     Preconditions = { { "HasTool", true } },
                     Effects = { { "HasWood", true } },
                 },
@@ -19,26 +21,22 @@ internal class Program
                 {
                     Name = "Find Twigs",
                     Cost = 8,
+                    Position = new(37, 12), // This should be updated to a random position each time the planner is run
                     Effects = { { "HasWood", true } },
                 },
                 new GoapAction
                 {
                     Name = "Store Resource [Wood]",
                     Cost = 1,
+                    Position = new(50, 40), // Storehouse location
                     Preconditions = { { "HasWood", true } },
                     Effects = { { "StoredWood", true } },
                 },
                 new GoapAction
                 {
-                    Name = "Get Resource [Wood]",
-                    Cost = 1,
-                    Preconditions = { { "StoredWood", true } },
-                    Effects = { { "HasWood", true } },
-                },
-                new GoapAction
-                {
                     Name = "Get Resource [Tool]",
                     Cost = 1,
+                    Position = new(50, 40), // Storehouse location
                     Preconditions = { { "StoredTool", true } },
                     Effects = { { "HasTool", true } },
                 }
@@ -48,10 +46,11 @@ internal class Program
             Name = "Gather Wood",
             State = { { "StoredWood", true } }
         };
-        Dictionary<string, bool> world_state = new() { { "StoredTool", true } };
+        Dictionary<string, object> world_state = new() { { "StoredTool", true } };
+        Agent agent = new Agent(new Position(40, 40));
 
         GoapPlanner planner = new();
-        var plan = planner.GetPlan(goal, world_state, actions);
+        var plan = planner.GetPlan(agent, goal, world_state, actions, true);
 
         foreach (var action in plan)
             Console.WriteLine($"Action {action.Name}");

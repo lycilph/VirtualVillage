@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using VirtualVillageConsoleApp.Simulation;
 
 namespace VirtualVillageConsoleApp.Goap;
 
@@ -7,6 +8,7 @@ public class GoapAction
 {
     public string Name { get; set; } = string.Empty;
     public double Cost { get; set; } = 0;
-    public Dictionary<string, bool> Preconditions { get; set; } = [];
-    public Dictionary<string, bool> Effects { get; set; } = [];
+    public Position Position { get; set; } = new(0, 0);
+    public Dictionary<string, object> Preconditions { get; set; } = [];
+    public Dictionary<string, object> Effects { get; set; } = [];
 }
