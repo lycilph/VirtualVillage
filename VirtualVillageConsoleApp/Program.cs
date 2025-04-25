@@ -1,68 +1,59 @@
-﻿using VirtualVillageConsoleApp.Actions;
+﻿using VirtualVillageConsoleApp.Goap;
 
 namespace VirtualVillageConsoleApp;
 
 internal class Program
 {
-    //static Simulation sim = new();
-
     static void Main()
     {
         List<GoapAction> actions =
             [
-                new IdleAction(),
-                new EatAction(),
-                new SleepAction(),
-                new FarmAction(),
-                new GoToAction(),
-                new StoreResourceAction()
+                new GoapAction
+                {
+                    Name = "Chop Wood",
+                    Cost = 4,
+                    Preconditions = { { "HasTool", true } },
+                    Effects = { { "HasWood", true } },
+                },
+                new GoapAction
+                {
+                    Name = "Find Twigs",
+                    Cost = 8,
+                    Effects = { { "HasWood", true } },
+                },
+                new GoapAction
+                {
+                    Name = "Store Resource [Wood]",
+                    Cost = 1,
+                    Preconditions = { { "HasWood", true } },
+                    Effects = { { "StoredWood", true } },
+                },
+                new GoapAction
+                {
+                    Name = "Get Resource [Wood]",
+                    Cost = 1,
+                    Preconditions = { { "StoredWood", true } },
+                    Effects = { { "HasWood", true } },
+                },
+                new GoapAction
+                {
+                    Name = "Get Resource [Tool]",
+                    Cost = 1,
+                    Preconditions = { { "StoredTool", true } },
+                    Effects = { { "HasTool", true } },
+                }
             ];
-        var planner = new GoapPlanner();
+        GoapGoal goal = new()
+        {
+            Name = "Gather Wood",
+            State = { { "StoredWood", true } }
+        };
+        Dictionary<string, bool> world_state = new() { { "StoredTool", true } };
 
-        var plan = planner.CreatePlan();
-        foreach ( var action in plan )
-            Console.WriteLine($"Action: {action}");
+        GoapPlanner planner = new();
+        planner.GetPlan(goal, world_state, actions);
 
         Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
-
-        //SetupSimulation();
-
-        //var sim_running = true;
-        //while (sim_running)
-        //{
-        //    Console.Clear();
-        //    Console.WriteLine("1. Advance simulation");
-        //    Console.WriteLine("2. Quit");
-
-        //    sim.Render();
-
-        //    var key = Console.ReadKey();
-        //    switch (key.KeyChar)
-        //    {
-        //        case '1':
-        //            sim.Update();
-        //            break;
-        //        case '2':
-        //            sim_running = false;
-        //            break;
-        //    }
-        //}
     }
-
-    //private static void SetupSimulation()
-    //{
-    //    var agent = new Agent { Name = "Bob" };
-    //    agent.State.Set("hunger", 0);
-    //    agent.State.Set("food", 0);
-    //    agent.Goals.Add(new SatiateHungerGoal());
-    //    agent.Goals.Add(new IdleGoal());
-    //    sim.Agents.Add(agent);
-
-    //    var tree = new Item { Name = "Tree", Position = new Position(10, 10) };
-    //    sim.Items.Add(tree);
-
-    //    var home = new Item { Name = "Home", Position = new Position(0, 0) };
-    //    sim.Items.Add(home);
-    //}
 }
