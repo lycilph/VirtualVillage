@@ -1,4 +1,4 @@
-﻿namespace VirtualVillageConsoleApp;
+﻿namespace VirtualVillageConsoleApp.Goap;
 
 public static class DictionaryExtensionMethods
 {

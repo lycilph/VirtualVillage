@@ -51,7 +51,10 @@ internal class Program
         Dictionary<string, bool> world_state = new() { { "StoredTool", true } };
 
         GoapPlanner planner = new();
-        planner.GetPlan(goal, world_state, actions);
+        var plan = planner.GetPlan(goal, world_state, actions);
+
+        foreach (var action in plan)
+            Console.WriteLine($"Action {action.Name}");
 
         Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
