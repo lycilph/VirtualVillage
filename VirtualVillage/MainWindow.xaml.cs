@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace VirtualVillage;
 
@@ -20,10 +21,10 @@ public partial class MainWindow : Window
 
         Agents = 
             [
-                new Agent(new Core.Position(5, 5)),
-                new Agent(new Core.Position(25, 15)),
-                new Agent(new Core.Position(55, 40)),
-                new Agent(new Core.Position(12, 50))
+                new Agent(new Core.Position(5, 5), Brushes.Blue),
+                new Agent(new Core.Position(250, 15), Brushes.Black),
+                new Agent(new Core.Position(450, 40), Brushes.Red),
+                new Agent(new Core.Position(120, 150), Brushes.Green)
             ];
     }
 }
