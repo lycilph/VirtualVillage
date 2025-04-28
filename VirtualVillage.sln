@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualVillage", "VirtualVi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualVillageConsoleApp", "VirtualVillageConsoleApp\VirtualVillageConsoleApp.csproj", "{0873C33D-8B42-480C-8A1E-FD392F153463}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{42F9EA2B-947C-45A1-83F2-0CAF16654B8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0873C33D-8B42-480C-8A1E-FD392F153463}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0873C33D-8B42-480C-8A1E-FD392F153463}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0873C33D-8B42-480C-8A1E-FD392F153463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42F9EA2B-947C-45A1-83F2-0CAF16654B8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42F9EA2B-947C-45A1-83F2-0CAF16654B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42F9EA2B-947C-45A1-83F2-0CAF16654B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42F9EA2B-947C-45A1-83F2-0CAF16654B8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

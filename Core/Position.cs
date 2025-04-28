@@ -1,4 +1,4 @@
-﻿namespace VirtualVillageConsoleApp.Simulation;
+﻿namespace Core;
 
 public readonly struct Position(double x, double y)
 {

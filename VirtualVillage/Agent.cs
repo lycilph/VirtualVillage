@@ -1,6 +1,6 @@
 ﻿using Core;
 
-namespace VirtualVillageConsoleApp.Simulation;
+namespace VirtualVillage;
 
 public class Agent(Position position)
 {

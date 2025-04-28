@@ -1,4 +1,5 @@
-﻿using VirtualVillageConsoleApp.Simulation;
+﻿using Core;
+using VirtualVillageConsoleApp.Simulation;
 
 namespace VirtualVillageConsoleApp.Goap;
 
@@ -28,7 +29,6 @@ public class GoapPlanner
 
         return plans.FirstOrDefault() ?? new();
     }
-
 
     // Recursive function to build the plan graph
     private void BuildGraphRecursive(GoapNode parent, Dictionary<string, object> goal_state, List<GoapAction> available_actions, List<GoapNode> leaves)
@@ -75,7 +75,7 @@ public class GoapPlanner
             foreach (var kvp in parent.State)
                 node_goal_state.Remove(kvp.Key);
 
-            var node = new GoapNode(parent, parent.RunningCost + action.Cost /*+ move_cost*/, parent.State.Clone(), action);
+            var node = new GoapNode(parent, parent.RunningCost + action.Cost, parent.State.Clone(), action);
             var remaining_action = available_actions.Except([action]).ToList();
 
             BuildGraphRecursive(node, node_goal_state, remaining_action, leaves);

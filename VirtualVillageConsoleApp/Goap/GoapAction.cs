@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using VirtualVillageConsoleApp.Simulation;
+using Core;
 
 namespace VirtualVillageConsoleApp.Goap;
 

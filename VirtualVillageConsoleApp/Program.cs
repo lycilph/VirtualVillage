@@ -1,4 +1,5 @@
-﻿using VirtualVillageConsoleApp.Goap;
+﻿using Core;
+using VirtualVillageConsoleApp.Goap;
 using VirtualVillageConsoleApp.Simulation;
 
 namespace VirtualVillageConsoleApp;
