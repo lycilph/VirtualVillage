@@ -4,7 +4,7 @@ namespace VirtualVillageConsoleApp.Goap;
 
 public class GoapPlanner
 {
-    public List<GoapAction> GetPlan(Agent agent, GoapGoal goal, Dictionary<string, object> state, List<GoapAction> available_action, bool verbose = false)
+    public GoapPlan GetPlan(Agent agent, GoapGoal goal, Dictionary<string, object> state, List<GoapAction> available_action, bool verbose = false)
     {
         var current_world_state = state.Clone();
         var root = new GoapNode(null, 0, current_world_state, null); // Root has no action
@@ -12,28 +12,26 @@ public class GoapPlanner
         // Build graph for achieving the goal
         var current_goal_state = goal.State.Clone();
         var leaves = new List<GoapNode>();
-        BuildGraphRecursive(agent, root, current_goal_state, available_action, leaves);
+        BuildGraphRecursive(root, current_goal_state, available_action, leaves);
+
+        var plans = leaves
+            .Select(UnpackPlan)
+            .Select(p => EvaluateMovementCost(agent, p))
+            .OrderBy(p => p.TotalCost())
+            .ToList();
 
         if (verbose)
         {
-            foreach (var leaf in leaves)
-            {
-                var plan = UnpackPlan(leaf);
-                Console.WriteLine($"Plan (cost {leaf.RunningCost}): {string.Join(',', plan.Select(a => a.Name))}");
-            }
+            foreach (var plan in plans)
+                Console.WriteLine($"Plan (Actions {plan.ActionCost}, Movement {plan.MovementCost}, Total {plan.TotalCost()}): {string.Join(',', plan.Actions.Select(a => a.Name))}");
         }
 
-        if (leaves.Count > 0)
-        {
-            var best_plan = leaves.OrderBy(n => n.RunningCost).First();
-            return UnpackPlan(best_plan);
-        }
-        else
-            return [];
+        return plans.FirstOrDefault() ?? new();
     }
 
+
     // Recursive function to build the plan graph
-    private void BuildGraphRecursive(Agent agent, GoapNode parent, Dictionary<string, object> goal_state, List<GoapAction> available_actions, List<GoapNode> leaves)
+    private void BuildGraphRecursive(GoapNode parent, Dictionary<string, object> goal_state, List<GoapAction> available_actions, List<GoapNode> leaves)
     {
         //Console.WriteLine("-------------------------------------------------------------");
         //Console.WriteLine("Current state:");
@@ -48,7 +46,6 @@ public class GoapPlanner
         if (goal_state.Count == 0)
         {
             //Console.WriteLine("Goal satisfied!");
-            parent.RunningCost += FindMovementCost(parent, agent);
             leaves.Add(parent);
             return;
         }
@@ -78,45 +75,32 @@ public class GoapPlanner
             foreach (var kvp in parent.State)
                 node_goal_state.Remove(kvp.Key);
 
-            // Find movement cost here
-            var move_cost = FindMovementCost(parent, action);
-
-            var node = new GoapNode(parent, parent.RunningCost + action.Cost + move_cost, parent.State.Clone(), action);
+            var node = new GoapNode(parent, parent.RunningCost + action.Cost /*+ move_cost*/, parent.State.Clone(), action);
             var remaining_action = available_actions.Except([action]).ToList();
 
-            BuildGraphRecursive(agent, node, node_goal_state, remaining_action, leaves);
+            BuildGraphRecursive(node, node_goal_state, remaining_action, leaves);
         }
     }
 
-    private double FindMovementCost(GoapNode parent, GoapAction action)
+    private static GoapPlan UnpackPlan(GoapNode node)
     {
-        if (parent.Action == null)
-            return 0; // This is the case for the first action after the root node (so in reality where the agent ends up)
-        else
-        {
-            var last_position = parent.Action!.Position;
-            var current_position = action!.Position;
-            return Position.Distance(last_position, current_position) / 10.0;
-        }
-    }
-
-    private double FindMovementCost(GoapNode parent, Agent agent)
-    {
-        var last_position = parent.Action!.Position;
-        var agent_position = agent.Position;
-        return Position.Distance(last_position, agent_position) / 10.0;
-    }
-
-    private static List<GoapAction> UnpackPlan(GoapNode node)
-    {
-        var plan = new List<GoapAction>();
+        var plan = new GoapPlan() { ActionCost = node.RunningCost };
         var current_node = node;
         while (current_node.Parent != null)
         {
             if (current_node.Action != null)
-                plan.Add(current_node.Action);
+                plan.Actions.Add(current_node.Action);
             current_node = current_node.Parent;
         }
+        return plan;
+    }
+
+    private static GoapPlan EvaluateMovementCost(Agent agent, GoapPlan plan)
+    {
+        plan.MovementCost = Position.Distance(agent.Position, plan.Actions.First().Position);
+        for (var i = 0; i < plan.Actions.Count-1; i++)
+            plan.MovementCost += Position.Distance(plan.Actions[i].Position, plan.Actions[i+1].Position);
+        plan.MovementCost /= 10.0;
         return plan;
     }
 }

@@ -52,7 +52,7 @@ internal class Program
         GoapPlanner planner = new();
         var plan = planner.GetPlan(agent, goal, world_state, actions, true);
 
-        foreach (var action in plan)
+        foreach (var action in plan.Actions)
             Console.WriteLine($"Action {action.Name}");
 
         Console.WriteLine("Press any key to continue...");
