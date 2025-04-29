@@ -7,24 +7,68 @@
         mc:Ignorable="d"
         Title="MainWindow"
         SizeToContent="WidthAndHeight">
-    <StackPanel>
-        <ItemsControl ItemsSource="{Binding Agents}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Width="500" Height="500"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemContainerStyle>
-                <Style TargetType="ContentPresenter">
-                    <Setter Property="Canvas.Left" Value="{Binding Position.X}"/>
-                    <Setter Property="Canvas.Top" Value="{Binding Position.Y}"/>
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Ellipse Width="5" Height="5" Fill="{Binding Color}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:Agent}">
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="5" Height="5" Fill="{Binding Color}"/>
+                <TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+                <TextBlock Margin="10 0 0 0">
+                    <Run Text="{Binding Position.X}"/>
+                    <Run Text="{Binding Position.Y}"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type local:Tree}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Tree"/>
+                <TextBlock Text="{Binding Health, StringFormat=Health: {0}}" Margin="10 0 0 0"/>
+                <TextBlock Margin="10 0 0 0">
+                    <Run Text="{Binding Position.X}"/>
+                    <Run Text="{Binding Position.Y}"/>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type local:Storehouse}">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Store"/>
+                <ItemsControl ItemsSource="{Binding Inventory}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    
+    <StackPanel Margin="20">
+        <StackPanel Orientation="Horizontal">
+            <Border BorderBrush="Gray"
+                    BorderThickness="1">
+                <ItemsControl ItemsSource="{Binding WorldObjects}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Width="500" Height="500"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding Position.X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Position.Y}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Ellipse Width="5" Height="5" Fill="{Binding Color}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        
+            <ItemsControl ItemsSource="{Binding WorldObjects}" 
+                          Width="250"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+            <Button Content="Start / Stop" Click="StartStopClick"/>
+            <Button Content="Step" Margin="10 0 0 0" Click="StepClick"/>
+        </StackPanel>
     </StackPanel>
 </Window>
