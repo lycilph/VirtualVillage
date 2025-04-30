@@ -141,6 +141,9 @@ public partial class MainWindow : Window
 
             lumberjack.Position.X += dir.X * 10.0f / dir_length;
             lumberjack.Position.Y += dir.Y * 10.0f / dir_length;
+
+            //Vector2.Multiply()
+            //Vector2.Distance()
         }
 
         view.Refresh();
