@@ -4,7 +4,7 @@ namespace Core.Goap;
 
 public static class GoapPlanner
 {
-    public static GoapPlan? GetBestPlan(Position start_position, GoapGoal goal, Dictionary<string, object> world_state, List<GoapAction> available_action, double movement_cost_weight)
+    public static GoapPlan? GetBestPlan(Vector2 start_position, GoapGoal goal, Dictionary<string, object> world_state, List<GoapAction> available_action, double movement_cost_weight)
     {
         var plans = GetPlans(goal, world_state, available_action);
         
