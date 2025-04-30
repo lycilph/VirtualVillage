@@ -9,13 +9,16 @@
         SizeToContent="WidthAndHeight">
     <Window.Resources>
         <DataTemplate DataType="{x:Type local:Agent}">
-            <StackPanel Orientation="Horizontal">
-                <Ellipse Width="5" Height="5" Fill="{Binding Color}"/>
-                <TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
-                <TextBlock Margin="10 0 0 0">
-                    <Run Text="{Binding Position.X}"/>
-                    <Run Text="{Binding Position.Y}"/>
-                </TextBlock>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Width="5" Height="5" Fill="{Binding Color}"/>
+                    <TextBlock Text="{Binding Name}" Margin="10 0 0 0"/>
+                    <TextBlock Margin="10 0 0 0">
+                        <Run Text="{Binding Position.X}"/>
+                        <Run Text="{Binding Position.Y}"/>
+                    </TextBlock>
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Inventory}"/>
             </StackPanel>
         </DataTemplate>
         

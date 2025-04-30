@@ -10,6 +10,8 @@ public class Agent(Position position, Brush color, string name) : IWorldObject
     public Brush Color { get; set; } = color;
     public string Name { get; set; } = name;
 
+    public Dictionary<string, int> Inventory { get; set; } = [];
+
     public List<GoapAction> Actions { get; set; } = [];
     public List<GoapGoal> Goals { get; set; } = [];
 
