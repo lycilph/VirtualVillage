@@ -1,4 +1,6 @@
-﻿namespace Core.Goap;
+﻿using System.Numerics;
+
+namespace Core.Goap;
 
 public static class GoapPlanner
 {
@@ -78,11 +80,11 @@ public static class GoapPlanner
         return plan;
     }
 
-    private static GoapPlan EvaluateMovementCost(GoapPlan plan, Position start_position, double movement_cost_weight)
+    private static GoapPlan EvaluateMovementCost(GoapPlan plan, Vector2 start_position, double movement_cost_weight)
     {
-        plan.MovementCost = Position.Distance(start_position, plan.Actions.First().Position);
+        plan.MovementCost = Vector2.Distance(start_position, plan.Actions.First().Position);
         for (var i = 0; i < plan.Actions.Count - 1; i++)
-            plan.MovementCost += Position.Distance(plan.Actions[i].Position, plan.Actions[i + 1].Position);
+            plan.MovementCost += Vector2.Distance(plan.Actions[i].Position, plan.Actions[i + 1].Position);
         plan.MovementCost /= movement_cost_weight;
         return plan;
     }
