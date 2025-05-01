@@ -2,9 +2,9 @@
 
 namespace Core.Goap;
 
-public static class GoapPlanner
+public static class GoapPlanner<T> where T : GoapAction
 {
-    public static GoapPlan? GetBestPlan(Vector2 start_position, GoapGoal goal, Dictionary<string, object> world_state, List<GoapAction> available_action, double movement_cost_weight)
+    public static GoapPlan? GetBestPlan(Vector2 start_position, GoapGoal goal, Dictionary<string, object> world_state, List<T> available_action, double movement_cost_weight) 
     {
         var plans = GetPlans(goal, world_state, available_action);
         
@@ -14,7 +14,7 @@ public static class GoapPlanner
             .FirstOrDefault();
     }
 
-    public static List<GoapPlan> GetPlans(GoapGoal goal, Dictionary<string, object> world_state, List<GoapAction> available_action)
+    public static List<GoapPlan> GetPlans(GoapGoal goal, Dictionary<string, object> world_state, List<T> available_action)
     {
         var current_world_state = world_state.Clone();
         var root = new GoapNode(null, 0, current_world_state, null); // Root has no action
@@ -31,7 +31,7 @@ public static class GoapPlanner
     }
 
     // Recursive function to build the plan graph
-    private static void BuildGraphRecursive(GoapNode parent, Dictionary<string, object> goal_state, List<GoapAction> available_actions, List<GoapNode> leaves)
+    private static void BuildGraphRecursive(GoapNode parent, Dictionary<string, object> goal_state, List<T> available_actions, List<GoapNode> leaves)
     {
         // Check if the parent state already satisfies the goal
         if (goal_state.Count == 0)
