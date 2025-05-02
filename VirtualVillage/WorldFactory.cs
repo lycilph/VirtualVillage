@@ -1,4 +1,5 @@
-﻿using VirtualVillage.Objects;
+﻿using System.Numerics;
+using VirtualVillage.Objects;
 
 namespace VirtualVillage;
 
@@ -8,7 +9,7 @@ public static class WorldFactory
     {
         var world = new World();
 
-        var storehouse = new Storehouse();
+        var storehouse = new Storehouse() { Position = new Vector2(50, 50) };
         storehouse.Inventory.Add("Tools", 1);
         world.WorldObjects.Add(storehouse);
 

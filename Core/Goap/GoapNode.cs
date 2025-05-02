@@ -1,9 +1,9 @@
 ﻿namespace Core.Goap;
 
-public class GoapNode(GoapNode? parent, double cost, Dictionary<string, object> state, GoapAction? action)
+public class GoapNode<T>(GoapNode<T>? parent, double cost, Dictionary<string, object> state, T? action) where T : GoapAction
 {
-    public GoapNode? Parent { get; set; } = parent;
+    public GoapNode<T>? Parent { get; set; } = parent;
     public double RunningCost { get; set; } = cost;
     public Dictionary<string, object> State { get; set; } = state;
-    public GoapAction? Action { get; set; } = action;
+    public T? Action { get; set; } = action;
 }

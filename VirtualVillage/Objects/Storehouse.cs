@@ -9,15 +9,13 @@ public class Storehouse : IWorldObject
 
     public Dictionary<string, int> Inventory { get; set; } = [];
 
-    public bool Has(string name) => Inventory.TryGetValue(name, out var value) && value > 0;
-
     public void Update(World world)
     {
     }
 
     public void Render()
     {
-        Console.WriteLine($"{Name}:");
+        Console.WriteLine($"{Name} - {Position}:");
         foreach (var item in Inventory)
             Console.WriteLine($"  {item}");
     }

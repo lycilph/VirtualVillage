@@ -12,6 +12,6 @@ public class GoapAgent<T> where T : GoapAction
     public List<T> Actions { get; set; } = [];
     public List<GoapGoal> Goals { get; set; } = [];
 
-    public GoapPlan? CurrentPlan { get; set; } = null;
-    public GoapAction? CurrentAction { get; set; } = null;
+    public GoapPlan<T>? CurrentPlan { get; set; } = null;
+    public T? CurrentAction { get; set; } = null;
 }

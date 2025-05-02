@@ -4,7 +4,7 @@ namespace Core.Goap;
 
 public static class GoapPlanner<T> where T : GoapAction
 {
-    public static GoapPlan? GetBestPlan(Vector2 start_position, GoapGoal goal, Dictionary<string, object> world_state, List<T> available_action, double movement_cost_weight) 
+    public static GoapPlan<T>? GetBestPlan(Vector2 start_position, GoapGoal goal, Dictionary<string, object> world_state, List<T> available_action, double movement_cost_weight) 
     {
         var plans = GetPlans(goal, world_state, available_action);
         
@@ -14,14 +14,14 @@ public static class GoapPlanner<T> where T : GoapAction
             .FirstOrDefault();
     }
 
-    public static List<GoapPlan> GetPlans(GoapGoal goal, Dictionary<string, object> world_state, List<T> available_action)
+    public static List<GoapPlan<T>> GetPlans(GoapGoal goal, Dictionary<string, object> world_state, List<T> available_action)
     {
         var current_world_state = world_state.Clone();
-        var root = new GoapNode(null, 0, current_world_state, null); // Root has no action
+        var root = new GoapNode<T>(null, 0, current_world_state, null); // Root has no action
 
         // Build graph for achieving the goal
         var current_goal_state = goal.State.Clone();
-        var leaves = new List<GoapNode>();
+        var leaves = new List<GoapNode<T>>();
         BuildGraphRecursive(root, current_goal_state, available_action, leaves);
 
         return leaves
@@ -31,7 +31,7 @@ public static class GoapPlanner<T> where T : GoapAction
     }
 
     // Recursive function to build the plan graph
-    private static void BuildGraphRecursive(GoapNode parent, Dictionary<string, object> goal_state, List<T> available_actions, List<GoapNode> leaves)
+    private static void BuildGraphRecursive(GoapNode<T> parent, Dictionary<string, object> goal_state, List<T> available_actions, List<GoapNode<T>> leaves)
     {
         // Check if the parent state already satisfies the goal
         if (goal_state.Count == 0)
@@ -60,16 +60,16 @@ public static class GoapPlanner<T> where T : GoapAction
             foreach (var kvp in parent.State)
                 node_goal_state.Remove(kvp.Key);
 
-            var node = new GoapNode(parent, parent.RunningCost + action.Cost, parent.State.Clone(), action);
+            var node = new GoapNode<T>(parent, parent.RunningCost + action.Cost, parent.State.Clone(), action);
             var remaining_action = available_actions.Except([action]).ToList();
 
             BuildGraphRecursive(node, node_goal_state, remaining_action, leaves);
         }
     }
 
-    private static GoapPlan UnpackPlan(GoapNode node)
+    private static GoapPlan<T> UnpackPlan(GoapNode<T> node)
     {
-        var plan = new GoapPlan() { ActionCost = node.RunningCost };
+        var plan = new GoapPlan<T>() { ActionCost = node.RunningCost };
         var current_node = node;
         while (current_node.Parent != null)
         {
@@ -80,7 +80,7 @@ public static class GoapPlanner<T> where T : GoapAction
         return plan;
     }
 
-    private static GoapPlan EvaluateMovementCost(GoapPlan plan, Vector2 start_position, double movement_cost_weight)
+    private static GoapPlan<T> EvaluateMovementCost(GoapPlan<T> plan, Vector2 start_position, double movement_cost_weight)
     {
         plan.MovementCost = Vector2.Distance(start_position, plan.Actions.First().Position);
         for (var i = 0; i < plan.Actions.Count - 1; i++)

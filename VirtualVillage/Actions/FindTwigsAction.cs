@@ -1,9 +1,12 @@
-﻿using VirtualVillage.Objects;
+﻿using Core.Goap;
+using VirtualVillage.Objects;
 
 namespace VirtualVillage.Actions;
 
 public class FindTwigsAction : ActionBase
 {
+    private Twigs? twigs;
+
     public FindTwigsAction()
     {
         Name = "Find Twigs";
@@ -13,13 +16,18 @@ public class FindTwigsAction : ActionBase
 
     public override void Update(World world, Villager villager)
     {
-        var tree = world.GetClosest<Tree>(villager.Position);
-        Position = tree.Position;
+        twigs = world.GetClosest<Twigs>(villager.Position);
+        Position = twigs.Position;
     }
 
     public override ActionResult Perform(World world, Villager villager)
     {
-        villager.AddWood(1);
+        if (twigs == null)
+            throw new Exception("Tree must not be null");
+
+        world.WorldObjects.Remove(twigs);
+
+        villager.Inventory.AddResource(World.Wood);
         return ActionResult.Completed;
     }
 }
