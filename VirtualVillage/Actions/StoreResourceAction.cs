@@ -15,6 +15,7 @@ public class StoreResourceAction : ActionBase
         Name = $"Store Resource [{resource}]";
         Position = position;
         Cost = 1;
+        Duration = 1;
         Preconditions = new Dictionary<string, object> { { $"Has{resource}", true } };
         Effects = new Dictionary<string, object> { { $"Stored{resource}", true } };
     }

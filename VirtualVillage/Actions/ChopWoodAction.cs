@@ -11,6 +11,7 @@ public class ChopWoodAction : ActionBase
     {
         Name = "Chop Wood";
         Cost = 4;
+        Duration = 5;
         Preconditions = new Dictionary<string, object> { { $"Has{World.Tools}", true } };
         Effects = new Dictionary<string, object> { { $"Has{World.Wood}", true } };
     }

@@ -7,6 +7,7 @@ namespace VirtualVillage;
 
 public class Villager : GoapAgent<ActionBase>, IWorldObject
 {
+    public int ActionTime { get; set; } = 0;
     public Dictionary<string, int> Inventory { get; set; } = [];
 
     public void Update(World world)
@@ -20,15 +21,22 @@ public class Villager : GoapAgent<ActionBase>, IWorldObject
             var dist = Vector2.Distance(Position, CurrentAction.Position);
             if (dist < 1)
             {
-                Console.WriteLine($"Villager {Name} performing action {CurrentAction.Name}");
-                var result = CurrentAction.Perform(world, this);
-                if (result == ActionBase.ActionResult.Completed)
-                    NextAction();
-                else
-                    CurrentPlan = null; // Cancel current plan and create a new next update
+                ActionTime++;
+
+                Console.WriteLine($"Villager {Name} performing action {CurrentAction.Name} (time {ActionTime}/{CurrentAction.Duration})");
+                if (ActionTime >= CurrentAction.Duration)
+                {
+                    var result = CurrentAction.Perform(world, this);
+                    if (result == ActionBase.ActionResult.Completed)
+                        NextAction();
+                    else
+                        CurrentPlan = null; // Cancel current plan and create a new next update
+                }
             }
             else
             {
+                Console.WriteLine($"Villager {Name} moving towards action {CurrentAction.Name} target {CurrentAction.Position}");
+
                 // Move towards the action position
                 var dir = CurrentAction.Position - Position;
                 dir = Vector2.Divide(dir, dir.Length());
@@ -45,13 +53,18 @@ public class Villager : GoapAgent<ActionBase>, IWorldObject
         CurrentPlan.Actions.Remove(CurrentAction);
 
         if (CurrentPlan.Actions.Count > 0)
+        {
             CurrentAction = CurrentPlan.Actions.First();
+            ActionTime = 0;
+        }
         else
             CurrentPlan = null; // Current plan is completed, so null to signal that a new needs to be created next update
     }
 
     private void CreateNewPlan(World world)
     {
+        Console.WriteLine($"Creating new plan for {Name}");
+
         // Update world state
         var world_state = new Dictionary<string, object>();
 

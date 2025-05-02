@@ -11,6 +11,7 @@ public class FindTwigsAction : ActionBase
     {
         Name = "Find Twigs";
         Cost = 8;
+        Duration = 3;
         Effects = new Dictionary<string, object> { { "HasWood", true } };
     }
 

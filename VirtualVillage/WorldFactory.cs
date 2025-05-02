@@ -13,10 +13,10 @@ public static class WorldFactory
         storehouse.Inventory.Add("Tools", 1);
         world.WorldObjects.Add(storehouse);
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
             world.WorldObjects.Add(new Tree(world.GetRandomPosition()));
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 1; i++)
             world.WorldObjects.Add(new Twigs(world.GetRandomPosition()));
 
         world.Villagers = VillagerFactory.CreateVillages(world);
