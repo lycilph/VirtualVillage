@@ -1,26 +1,21 @@
 ﻿namespace VirtualVillage;
 
-public class GoapAction
+public abstract class GoapAction
 {
-    public string Name { get; }
-    public Position TargetLocation { get; }
-    public float BaseCost { get; }
+    public abstract string Name { get; }
 
-    public List<StateRequirement> Preconditions { get; } = [];
-    public List<ActionEffect> PredictedEffects { get; } = [];
-    public Action<VillageWorld, Agent>? Execute { get; set; }
+    public abstract bool CanRun(GoapState state);
+    public abstract void Apply(GoapState state);
 
-    public GoapAction(string name, Position location, float cost = 1f)
+    public abstract int GetCost(GoapState state);
+
+    // EXECUTION (default = no world effect)
+    public virtual void Execute(World world, Villager villager)
     {
-        Name = name;
-        TargetLocation = location;
-        BaseCost = cost;
+        // Default: no side effects
     }
 
-    public float GetTotalCost(WorldState current)
-    {
-        // We look up current PosX and PosY to create a temporary Position object
-        var currentPos = new Position(current.Get("PosX"), current.Get("PosY"));
-        return BaseCost + currentPos.DistanceTo(TargetLocation);
-    }
+    // Optional spatial target
+    public virtual bool HasTargetPosition => false;
+    public virtual Position TargetPosition => default;
 }
