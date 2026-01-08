@@ -1,4 +1,4 @@
-﻿namespace VirtualVillage;
+﻿namespace VirtualVillage.Actions;
 
 public class MoveAction(Position target) : GoapAction
 {

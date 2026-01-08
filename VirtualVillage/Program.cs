@@ -1,53 +1,41 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Entities;
+
+namespace VirtualVillage;
 
 internal class Program
 {
     static void Main()
     {
-        var forest = new Position(5, 1);
-        var storehousePos = new Position(0, 0);
+        var world = new World();
 
-        var lumberjack = new Villager("Leif", storehousePos);
+        var forest = new ForestEntity(new Position(5, 1));
+        var mine = new MineEntity(new Position(-3, 1));
 
-        lumberjack.State.Set("WoodCarried", 0);
-        lumberjack.State.Set("StorehouseWood", 0);
+        var storehouse = new StorehouseEntity(new Position(0, 0));
 
-        lumberjack.AvailableActions.AddRange(new GoapAction[]
-        {
-            new MoveAction(forest),
-            new MoveAction(storehousePos),
-            new ChopWoodAction(forest),
-            new DepositWoodAction(storehousePos)
-        });
+        world.Entities.AddRange([forest, mine, storehouse]);
+
+        var lumberjack = new Villager("Leif", storehouse.Position);
+        //lumberjack.State.Set("OreCarried", 0);
+        //lumberjack.State.Set("WoodCarried", 0);
+        //lumberjack.State.Set("StorehouseOre", 0);
+        //lumberjack.State.Set("StorehouseWood", 0);
 
         var lumberGoal = new GoapState();
         lumberGoal.Set("StorehouseWood", 5);
 
-        var mine = new Position(-3, 1);
-
-        var miner = new Villager("Bjorn", storehousePos);
-
-        miner.State.Set("OreCarried", 0);
-        miner.State.Set("StorehouseOre", 0);
-        
-        miner.AvailableActions.AddRange(new GoapAction[]
-        {
-            new MoveAction(mine),
-            new MoveAction(storehousePos),
-            new MineOreAction(mine),
-            new DepositOreAction(storehousePos)
-        });
+        var miner = new Villager("Bjorn", storehouse.Position);
+        //miner.State.Set("OreCarried", 0);
+        //miner.State.Set("WoodCarried", 0);
+        //miner.State.Set("StorehouseOre", 0);
+        //miner.State.Set("StorehouseWood", 0);
 
         var minerGoal = new GoapState();
         minerGoal.Set("StorehouseOre", 3);
 
-        var world = new World
-        {
-            Storehouse = new Storehouse(storehousePos)
-        };
-
-        world.Villagers.Add(lumberjack);
-        world.Villagers.Add(miner);
+        world.Villagers.AddRange([lumberjack, miner]);
+        foreach (var v in world.Villagers)
+            v.CollectActions(world);
 
         var planner = new GoapPlanner(
             logger: new ConsoleGoapLogger(),

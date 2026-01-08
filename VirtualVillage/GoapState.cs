@@ -21,6 +21,14 @@ public class GoapState
         return false;
     }
 
+    public T GetOrDefault<T>(string key, T defaultValue = default!)
+    {
+        if (values.TryGetValue(key, out var v) && v is T typed)
+            return typed;
+
+        return defaultValue;
+    }
+
     public GoapState Clone()
     {
         var copy = new GoapState();

@@ -1,4 +1,6 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Actions;
+
+namespace VirtualVillage;
 
 public class Villager
 {
@@ -21,6 +23,17 @@ public class Villager
         State.Set("HasFood", false);
     }
 
+    public void CollectActions(World world)
+    {
+        AvailableActions.Clear();
+
+        foreach (var entity in world.Entities)
+        {
+            foreach (var action in entity.GetActionsFor(this, world))
+                AvailableActions.Add(action);
+        }
+    }
+
     public void SetPlan(IEnumerable<GoapAction> actions)
     {
         plan = new Queue<GoapAction>(actions);
@@ -41,6 +54,8 @@ public class Villager
         }
 
         var action = plan.Dequeue();
+        // Capture state BEFORE Apply
+        var context = new ActionExecutionContext(State.Clone());
 
         Console.WriteLine($"{world.Tick}: {Name} starts {action.Name}");
 
@@ -59,6 +74,6 @@ public class Villager
         State.Set("Position", Position);
 
         // 🔑 Let the action affect the world
-        action.Execute(world, this);
+        action.Execute(world, this, context);
     }
 }

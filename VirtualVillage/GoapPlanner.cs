@@ -1,4 +1,6 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Actions;
+
+namespace VirtualVillage;
 
 public class GoapPlanner
 {
@@ -84,8 +86,6 @@ public class GoapPlanner
                 // 🚫 Skip already explored states
                 if (closed.Contains(newState))
                     continue;
-
-                var newCost = current.Cost + action.GetCost(current.State);
 
                 var g = current.Cost + action.GetCost(current.State);
                 var h = heuristic?.Estimate(newState, goal) ?? 0;

@@ -1,4 +1,6 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Actions;
+
+namespace VirtualVillage;
 
 public static class PlanPrinter
 {
