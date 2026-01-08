@@ -19,8 +19,8 @@ public class Villager
         Position = start;
 
         State = new GoapState();
-        State.Set("Position", start);
-        State.Set("HasFood", false);
+        State.Set(WorldKeys.Position, start);
+        State.Set(WorldKeys.HasFood, false);
     }
 
     public void CollectActions(World world)
@@ -71,7 +71,7 @@ public class Villager
 
         // Update belief state
         action.Apply(State);
-        State.Set("Position", Position);
+        State.Set(WorldKeys.Position, Position);
 
         // 🔑 Let the action affect the world
         action.Execute(world, this, context);

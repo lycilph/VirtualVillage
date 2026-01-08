@@ -9,18 +9,18 @@ public class MoveAction(Position target) : GoapAction
 
     public override bool CanRun(GoapState state)
     {
-        var pos = state.Get<Position>("Position");
+        var pos = state.Get(WorldKeys.Position);
         return !pos.Equals(target);
     }
 
     public override void Apply(GoapState state)
     {
-        state.Set("Position", target);
+        state.Set(WorldKeys.Position, target);
     }
 
     public override int GetCost(GoapState state)
     {
-        var pos = state.Get<Position>("Position");
+        var pos = state.Get(WorldKeys.Position);
         return pos.DistanceTo(target);
     }
 }

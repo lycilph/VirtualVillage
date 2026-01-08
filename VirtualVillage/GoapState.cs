@@ -2,14 +2,14 @@
 
 public class GoapState
 {
-    private readonly Dictionary<string, object> values = [];
+    private readonly Dictionary<object, object> values = [];
 
-    public T Get<T>(string key) => (T)values[key];
-    public bool Has(string key) => values.ContainsKey(key);
-    public void Set(string key, object value) => values[key] = value;
-    public IReadOnlyDictionary<string, object> GetAll() => values;
+    public T Get<T>(StateKey<T> key) => (T)values[key];
+    public bool Has<T>(StateKey<T> key) => values.ContainsKey(key);
+    public void Set<T>(StateKey<T> key, T value) => values[key] = value!;
+    public IReadOnlyDictionary<object, object> GetAll() => values;
     
-    public bool TryGet<T>(string key, out T value)
+    public bool TryGet<T>(StateKey<T> key, out T value)
     {
         if (values.TryGetValue(key, out var v) && v is T typed)
         {
@@ -21,7 +21,7 @@ public class GoapState
         return false;
     }
 
-    public T GetOrDefault<T>(string key, T defaultValue = default!)
+    public T GetOrDefault<T>(StateKey<T> key, T defaultValue = default!)
     {
         if (values.TryGetValue(key, out var v) && v is T typed)
             return typed;
@@ -83,13 +83,9 @@ public class GoapState
         unchecked
         {
             int hash = 17;
-            foreach (var kv in values.OrderBy(k => k.Key))
-            {
-                hash = hash * 23 + kv.Key.GetHashCode();
-                hash = hash * 23 + kv.Value.GetHashCode();
-            }
+            foreach (var (key, value) in values)
+                hash ^= HashCode.Combine(key.GetHashCode(), value?.GetHashCode() ?? 0);
             return hash;
         }
     }
-
 }

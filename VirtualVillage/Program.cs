@@ -16,22 +16,14 @@ internal class Program
         world.Entities.AddRange([forest, mine, storehouse]);
 
         var lumberjack = new Villager("Leif", storehouse.Position);
-        //lumberjack.State.Set("OreCarried", 0);
-        //lumberjack.State.Set("WoodCarried", 0);
-        //lumberjack.State.Set("StorehouseOre", 0);
-        //lumberjack.State.Set("StorehouseWood", 0);
 
         var lumberGoal = new GoapState();
-        lumberGoal.Set("StorehouseWood", 5);
+        lumberGoal.Set(WorldKeys.StorehouseWood, 5);
 
         var miner = new Villager("Bjorn", storehouse.Position);
-        //miner.State.Set("OreCarried", 0);
-        //miner.State.Set("WoodCarried", 0);
-        //miner.State.Set("StorehouseOre", 0);
-        //miner.State.Set("StorehouseWood", 0);
 
         var minerGoal = new GoapState();
-        minerGoal.Set("StorehouseOre", 3);
+        minerGoal.Set(WorldKeys.StorehouseOre, 3);
 
         world.Villagers.AddRange([lumberjack, miner]);
         foreach (var v in world.Villagers)

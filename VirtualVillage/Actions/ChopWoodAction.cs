@@ -13,16 +13,16 @@ public class ChopWoodAction : GoapAction
 
     public override bool CanRun(GoapState state)
     {
-        var pos = state.Get<Position>("Position");
-        var carried = state.GetOrDefault<int>("WoodCarried", 0);
+        var pos = state.GetOrDefault(WorldKeys.Position);
+        var carried = state.GetOrDefault(WorldKeys.WoodCarried, 0);
 
         return pos.Equals(forest) && carried < 5;
     }
 
     public override void Apply(GoapState state)
     {
-        var carried = state.GetOrDefault<int>("WoodCarried", 0);
-        state.Set("WoodCarried", carried + 1);
+        var carried = state.GetOrDefault(WorldKeys.WoodCarried, 0);
+        state.Set(WorldKeys.WoodCarried, carried + 1);
     }
 
     public override int GetCost(GoapState state) => 2;
