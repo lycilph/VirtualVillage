@@ -21,7 +21,8 @@ class Program
         var actions = new List<GoapAction> {
             new PickUpAxeAction(),
             new ChopWoodAction(),
-            new DropOffWoodAction()
+            new DropOffWoodAction(),
+            new EatAction()
         };
 
         v1.AvailableActions = actions;
@@ -29,6 +30,7 @@ class Program
 
         while (true)
         {
+            Console.WriteLine();
             Storehouse.PrintStatus();
 
             v1.Update();
