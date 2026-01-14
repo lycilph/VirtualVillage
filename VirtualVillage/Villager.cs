@@ -1,79 +1,107 @@
 ﻿using VirtualVillage.Actions;
+using VirtualVillage.Core;
 
 namespace VirtualVillage;
 
 public class Villager
 {
-    public string Name { get; }
-    public Position Position { get; private set; }
-    public List<GoapAction> AvailableActions { get; set; } = [];
+    public required string Name;
+    public float Hunger = 100f; // Start full
+    public WorldState CurrentState = [];
+    public List<GoapAction> AvailableActions = [];
 
-    private Queue<GoapAction> plan = new();
-    private int remaining;
+    // Store the current active plan
+    public WorldState currentGoal = [];
+    private Queue<GoapAction>? currentPlan = null;
 
-    public GoapState State { get; }
-
-    public Villager(string name, Position start)
+    public void Update()
     {
-        Name = name;
-        Position = start;
+        Console.WriteLine($"\n--- {Name}'s Turn ---");
 
-        State = new GoapState();
-        State.Set(WorldKeys.Position, start);
-        State.Set(WorldKeys.HasFood, false);
-    }
+        // 1. Hunger decreases every turn
+        Hunger -= 15f;
+        CurrentState["isHungry"] = (Hunger < 30);
 
-    public void CollectActions(World world)
-    {
-        AvailableActions.Clear();
-
-        foreach (var entity in world.Entities)
+        // 2. Dynamic Goal Selection
+        WorldState newGoal = new WorldState();
+        if (CurrentState["isHungry"])
         {
-            foreach (var action in entity.GetActionsFor(this, world))
-                AvailableActions.Add(action);
-        }
-    }
-
-    public void SetPlan(IEnumerable<GoapAction> actions)
-    {
-        plan = new Queue<GoapAction>(actions);
-    }
-
-    public void Update(World world)
-    {
-        if (remaining > 0)
-        {
-            remaining--;
-            return;
-        }
-
-        if (!plan.Any())
-        {
-            Console.WriteLine($"{world.Tick}: {Name} is idle");
-            return;
-        }
-
-        var action = plan.Dequeue();
-        // Capture state BEFORE Apply
-        var context = new ActionExecutionContext(State.Clone());
-
-        Console.WriteLine($"{world.Tick}: {Name} starts {action.Name}");
-
-        if (action is MoveAction move)
-        {
-            remaining = Position.DistanceTo(move.TargetPosition);
-            Position = move.TargetPosition;
+            newGoal.Add("isHungry", false); // Priority: Eat!
         }
         else
         {
-            remaining = action.GetCost(State);
+            newGoal.Add("deliveredWood", true); // Default: Work
         }
 
-        // Update belief state
-        action.Apply(State);
-        State.Set(WorldKeys.Position, Position);
+        // 3. Re-plan if goal changed or plan finished
+        if (currentGoal == null || !currentGoal.IsMet(newGoal) || currentPlan == null || currentPlan.Count == 0)
+        {
+            currentGoal = newGoal;
+            currentPlan = SimplePlanner.Plan(CurrentState, currentGoal, AvailableActions, this);
 
-        // 🔑 Let the action affect the world
-        action.Execute(world, this, context);
+            if (currentPlan.Count == 0)
+            {
+                Console.WriteLine($"{Name} is idling... No valid plan found.");
+                return;
+            }
+        }
+
+        // 4. Execution logic (same as before)
+        if (currentPlan != null && currentPlan.Count > 0)
+        {
+            var nextAction = currentPlan.Peek();
+            if (CurrentState.IsMet(nextAction.Preconditions) && nextAction.IsPossible(this))
+            {
+                Console.WriteLine($"{Name} (Hunger: {Hunger:0}): {nextAction.Name}");
+                nextAction.Execute(this);
+                currentPlan.Dequeue();
+
+                // 5. Apply effects to the villager's state
+                foreach (var effect in nextAction.Effects)
+                {
+                    CurrentState[effect.Key] = effect.Value;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"{Name}'s plan failed! Preconditions no longer met.");
+                currentPlan = null; // Forces re-plan next turn
+                return;
+            }
+        }
+
+        //// 1. If we don't have a plan, or the world changed and the plan is no longer valid, make a new one
+        //if (currentPlan == null || currentPlan.Count == 0)
+        //{
+        //    currentPlan = SimplePlanner.Plan(CurrentState, Goal, AvailableActions, this);
+
+        //    if (currentPlan.Count == 0)
+        //    {
+        //        Console.WriteLine($"{Name} is idling... No valid plan found.");
+        //        return;
+        //    }
+        //}
+
+        //// 2. Get the next action from the queue (without removing it yet)
+        //var nextAction = currentPlan.Peek();
+
+        //// 3. Check if preconditions are still met (in case the world changed)
+        //if (!CurrentState.IsMet(nextAction.Preconditions))
+        //{
+        //    Console.WriteLine($"{Name}'s plan failed! Preconditions no longer met.");
+        //    currentPlan = null; // Clear plan so we re-plan next tick
+        //    return;
+        //}
+
+        //// 4. Execute and remove from queue
+        //Console.WriteLine($"\n--- {Name}'s Turn ---");
+        //nextAction.Execute(this);
+        //currentPlan.Dequeue();
+
+        //// 5. Apply effects to the villager's state
+        //foreach (var effect in nextAction.Effects)
+        //{
+        //    CurrentState[effect.Key] = effect.Value;
+        //}
     }
 }

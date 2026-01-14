@@ -1,55 +1,52 @@
-﻿using VirtualVillage.Entities;
+﻿using VirtualVillage.Actions;
 
 namespace VirtualVillage;
 
-internal class Program
+class Program
 {
+    //try gemini version
+
     static void Main()
     {
-        var world = new World();
+        Console.WriteLine("Simulation started.");
 
-        var forest = new ForestEntity(new Position(5, 1));
-        var mine = new MineEntity(new Position(-3, 1));
+        var v1 = new Villager { Name = "Eldric" };
+        var v2 = new Villager { Name = "Gunther" };
 
-        var storehouse = new StorehouseEntity(new Position(0, 0));
+        // Both want to deliver wood to the village
+        v1.currentGoal.Add("deliveredWood", true);
+        v2.currentGoal.Add("deliveredWood", true);
 
-        world.Entities.AddRange([forest, mine, storehouse]);
+        // Give them both the same set of abilities
+        var actions = new List<GoapAction> {
+            new PickUpAxeAction(),
+            new ChopWoodAction(),
+            new DropOffWoodAction()
+        };
 
-        var lumberjack = new Villager("Leif", storehouse.Position);
+        v1.AvailableActions = actions;
+        v2.AvailableActions = actions;
 
-        var lumberGoal = new GoapState();
-        lumberGoal.Set(WorldKeys.StorehouseWood, 5);
+        while (true)
+        {
+            Storehouse.PrintStatus();
 
-        var miner = new Villager("Bjorn", storehouse.Position);
+            v1.Update();
+            v2.Update();
 
-        var minerGoal = new GoapState();
-        minerGoal.Set(WorldKeys.StorehouseOre, 3);
+            if (v1.CurrentState.IsMet(v1.currentGoal) && v2.CurrentState.IsMet(v2.currentGoal))
+            {
+                Console.WriteLine("All villagers finished their work!");
+                Console.ReadKey();
+                break;
+            }
 
-        world.Villagers.AddRange([lumberjack, miner]);
-        foreach (var v in world.Villagers)
-            v.CollectActions(world);
+            Console.WriteLine();
+            Console.WriteLine("Step simulation [Enter] or Quit [q]");
+            var keyInfo = Console.ReadKey();
 
-        var planner = new GoapPlanner(
-            logger: new ConsoleGoapLogger(),
-            heuristic: new PositionDistanceHeuristic());
-
-        // Plan separately (important!)
-        lumberjack.SetPlan(planner.Plan(
-            lumberjack.State.Clone(),
-            lumberGoal,
-            lumberjack.AvailableActions)!);
-
-        miner.SetPlan(planner.Plan(
-            miner.State.Clone(),
-            minerGoal,
-            miner.AvailableActions)!);
-
-        // Run simulation
-        Console.WriteLine("Starting simulation");
-        for (int i = 0; i < 35; i++)
-            world.Step();
-
-        Console.Write("Simulation completed");
-        Console.ReadKey();
+            if (keyInfo.Key == ConsoleKey.Q)
+                break;
+        }
     }
 }

@@ -1,24 +1,17 @@
-﻿using VirtualVillage.Entities;
+﻿using VirtualVillage.Core;
 
 namespace VirtualVillage.Actions;
 
 public abstract class GoapAction
 {
-    public abstract string Name { get; }
-    public WorldEntity Source { get; init; } = null!;
+    public string Name { get; protected set; }
+    public float Cost { get; protected set; } = 1f;
 
-    public abstract bool CanRun(GoapState state);
-    public abstract void Apply(GoapState state);
+    public WorldState Preconditions = [];
+    public WorldState Effects = [];
 
-    public abstract int GetCost(GoapState state);
+    protected GoapAction(string name) { Name = name; }
 
-    // EXECUTION (default = no world effect)
-    public virtual void Execute(World world, Villager villager, ActionExecutionContext context)
-    {
-        // Default: no side effects
-    }
-
-    // Optional spatial target
-    public virtual bool HasTargetPosition => false;
-    public virtual Position TargetPosition => default;
+    public abstract void Execute(Villager agent);
+    public virtual bool IsPossible(Villager agent) => true;
 }
