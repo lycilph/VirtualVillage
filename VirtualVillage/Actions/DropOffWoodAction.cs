@@ -5,6 +5,7 @@ public class DropOffWoodAction : GoapAction
     public DropOffWoodAction() : base("Drop off Wood")
     {
         Preconditions.Add("hasFirewood", true);
+        Preconditions.Add("atStorehouse", true);
         Effects.Add("deliveredWood", true);
     }
 

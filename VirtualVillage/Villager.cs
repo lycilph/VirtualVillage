@@ -6,6 +6,7 @@ namespace VirtualVillage;
 public class Villager
 {
     public required string Name;
+    public Location CurrentLocation = Location.Home;
     public float Hunger = 100f; // Start full
     public WorldState CurrentState = [];
     public List<GoapAction> AvailableActions = [];
@@ -17,6 +18,11 @@ public class Villager
     public void Update()
     {
         Console.WriteLine($"\n--- {Name}'s Turn ---");
+
+        // Sync Enum to WorldState Dictionary
+        CurrentState["atStorehouse"] = (CurrentLocation == Location.Storehouse);
+        CurrentState["atWoods"] = (CurrentLocation == Location.Woods);
+        CurrentState["atHome"] = (CurrentLocation == Location.Home);
 
         // 1. Hunger decreases every turn
         Hunger -= 15f;
@@ -69,39 +75,5 @@ public class Villager
                 return;
             }
         }
-
-        //// 1. If we don't have a plan, or the world changed and the plan is no longer valid, make a new one
-        //if (currentPlan == null || currentPlan.Count == 0)
-        //{
-        //    currentPlan = SimplePlanner.Plan(CurrentState, Goal, AvailableActions, this);
-
-        //    if (currentPlan.Count == 0)
-        //    {
-        //        Console.WriteLine($"{Name} is idling... No valid plan found.");
-        //        return;
-        //    }
-        //}
-
-        //// 2. Get the next action from the queue (without removing it yet)
-        //var nextAction = currentPlan.Peek();
-
-        //// 3. Check if preconditions are still met (in case the world changed)
-        //if (!CurrentState.IsMet(nextAction.Preconditions))
-        //{
-        //    Console.WriteLine($"{Name}'s plan failed! Preconditions no longer met.");
-        //    currentPlan = null; // Clear plan so we re-plan next tick
-        //    return;
-        //}
-
-        //// 4. Execute and remove from queue
-        //Console.WriteLine($"\n--- {Name}'s Turn ---");
-        //nextAction.Execute(this);
-        //currentPlan.Dequeue();
-
-        //// 5. Apply effects to the villager's state
-        //foreach (var effect in nextAction.Effects)
-        //{
-        //    CurrentState[effect.Key] = effect.Value;
-        //}
     }
 }

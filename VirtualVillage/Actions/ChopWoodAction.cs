@@ -5,6 +5,7 @@ public class ChopWoodAction : GoapAction
     public ChopWoodAction() : base("Chop Wood")
     {
         Preconditions.Add("hasAxe", true);
+        Preconditions.Add("atWoods", true);
         Effects.Add("hasFirewood", true);
     }
 

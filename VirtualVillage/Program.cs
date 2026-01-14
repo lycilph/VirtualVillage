@@ -22,7 +22,10 @@ class Program
             new PickUpAxeAction(),
             new ChopWoodAction(),
             new DropOffWoodAction(),
-            new EatAction()
+            new EatAction(),
+            new MoveAction(Location.Storehouse),
+            new MoveAction(Location.Woods),
+            new MoveAction(Location.Home)
         };
 
         v1.AvailableActions = actions;
@@ -35,13 +38,6 @@ class Program
 
             v1.Update();
             v2.Update();
-
-            if (v1.CurrentState.IsMet(v1.currentGoal) && v2.CurrentState.IsMet(v2.currentGoal))
-            {
-                Console.WriteLine("All villagers finished their work!");
-                Console.ReadKey();
-                break;
-            }
 
             Console.WriteLine();
             Console.WriteLine("Step simulation [Enter] or Quit [q]");

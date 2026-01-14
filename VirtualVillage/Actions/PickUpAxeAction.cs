@@ -4,6 +4,7 @@ public class PickUpAxeAction : GoapAction
 {
     public PickUpAxeAction() : base("Pick up Axe")
     {
+        Preconditions.Add("atStorehouse", true);
         Effects.Add("hasAxe", true);
     }
 
