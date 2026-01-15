@@ -17,7 +17,7 @@ public static class SimplePlanner
         List<Node> leaves = new List<Node>();
         Node root = new Node(null, 0, startState, null);
 
-        if (BuildGraph(root, leaves, availableActions, goal, agent))
+        if (BuildGraph(root, leaves, availableActions, goal, agent, 0))
         {
             // Find the cheapest leaf (lowest total cost)
             Node cheapest = leaves.OrderBy(n => n.RunningCost).First();
@@ -36,10 +36,11 @@ public static class SimplePlanner
         return new Queue<GoapAction>(); // No path found
     }
 
-    private static bool BuildGraph(Node parent, List<Node> leaves, List<GoapAction> usableActions, WorldState goal, Villager agent)
+    private static bool BuildGraph(Node parent, List<Node> leaves, List<GoapAction> usableActions, WorldState goal, Villager agent, int depth)
     {
-        bool foundPath = false;
+        if (depth > 10) return false; // Prevent infinite recursion/StackOverflow
 
+        bool foundPath = false;
         foreach (var action in usableActions)
         {
             // Can we perform this action given the state at the parent node?
@@ -59,11 +60,7 @@ public static class SimplePlanner
                 }
                 else
                 {
-                    // Branch out further, removing the current action to avoid infinite loops
-                    var remaining = new List<GoapAction>(usableActions);
-                    remaining.Remove(action);
-
-                    if (BuildGraph(node, leaves, remaining, goal, agent))
+                    if (BuildGraph(node, leaves, usableActions, goal, agent, depth+1))
                         foundPath = true;
                 }
             }

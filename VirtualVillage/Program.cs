@@ -23,10 +23,12 @@ class Program
             new ChopWoodAction(),
             new DropOffWoodAction(),
             new EatAction(),
-            new MoveAction(Location.Storehouse),
-            new MoveAction(Location.Woods),
-            new MoveAction(Location.Home)
         };
+        // Add the move actions
+        foreach (Location loc in Enum.GetValues<Location>())
+        {
+            actions.Add(new MoveAction(loc));
+        }
 
         v1.AvailableActions = actions;
         v2.AvailableActions = actions;

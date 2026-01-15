@@ -9,7 +9,13 @@ public class MoveAction : GoapAction
         targetLocation = target;
         // The effect is that we are now at the target location
         Effects.Add($"at{target}", true);
-        Cost = 1f;
+
+        // Add all OTHER locations to RemoveEffects
+        foreach (Location loc in Enum.GetValues<Location>())
+        {
+            if (loc != target)
+                Effects.Add($"at{loc}", false);
+        }
     }
 
     public override bool IsPossible(Villager agent)
