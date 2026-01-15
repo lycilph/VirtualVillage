@@ -1,5 +1,9 @@
-﻿namespace VirtualVillage.Actions;
+﻿using System.Diagnostics;
+using System.Threading;
 
+namespace VirtualVillage.Actions;
+
+[DebuggerDisplay("{Name,nq}")]
 public class MoveAction : GoapAction
 {
     private Location targetLocation;
@@ -7,15 +11,12 @@ public class MoveAction : GoapAction
     public MoveAction(Location target) : base($"Move to {target}")
     {
         targetLocation = target;
-        // The effect is that we are now at the target location
-        Effects.Add($"at{target}", true);
 
-        // Add all OTHER locations to RemoveEffects
+        Preconditions.Add($"at{target}", false);
+
+        // The effect is that we are now at the target location
         foreach (Location loc in Enum.GetValues<Location>())
-        {
-            if (loc != target)
-                Effects.Add($"at{loc}", false);
-        }
+            Effects.Add($"at{loc}", target == loc);
     }
 
     public override bool IsPossible(Villager agent)

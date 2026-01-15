@@ -48,8 +48,7 @@ public static class SimplePlanner
             {
                 // Apply action effects to the parent's state to get the new state
                 WorldState newState = parent.State.Clone();
-                foreach (var effect in action.Effects)
-                    newState[effect.Key] = effect.Value;
+                action.ApplyToState(newState);
 
                 Node node = new Node(parent, parent.RunningCost + action.Cost, newState, action);
 

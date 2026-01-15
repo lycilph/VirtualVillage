@@ -12,6 +12,14 @@ public abstract class GoapAction
 
     protected GoapAction(string name) { Name = name; }
 
-    public abstract void Execute(Villager agent);
     public virtual bool IsPossible(Villager agent) => true;
+    public abstract void Execute(Villager agent);
+    
+    // This allows the planner to simulate the result of an action 
+    // without actually changing the real world yet.
+    public virtual void ApplyToState(WorldState state)
+    {
+        foreach (var effect in Effects)
+            state[effect.Key] = effect.Value;
+    }
 }

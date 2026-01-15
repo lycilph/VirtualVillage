@@ -14,7 +14,6 @@ public class EatAction : GoapAction
     {
         Storehouse.Bread--;
         agent.Hunger = 100f; // Fully fed
-        agent.CurrentState["isHungry"] = false;
         Console.WriteLine($"{agent.Name} ate a loaf of bread.");
     }
 }

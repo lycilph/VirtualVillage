@@ -5,6 +5,8 @@ public class PickUpAxeAction : GoapAction
     public PickUpAxeAction() : base("Pick up Axe")
     {
         Preconditions.Add("atStorehouse", true);
+        Preconditions.Add("hasAxe", false);
+
         Effects.Add("hasAxe", true);
     }
 
@@ -13,6 +15,7 @@ public class PickUpAxeAction : GoapAction
     public override void Execute(Villager agent)
     {
         Storehouse.Axes--;
+        agent.HasAxe = true;
         Console.WriteLine($"{agent.Name} took an axe from the storehouse.");
     }
 }
