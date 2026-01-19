@@ -9,6 +9,8 @@ public static class Planner
         public GoapAction? Action;
         public Node? Parent;
         public float G; // Cost from start
+        public float H;
+        public float F;
 
         public Node(WorldState state, GoapAction? action, Node? parent, float g)
         {

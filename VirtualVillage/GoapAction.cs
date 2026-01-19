@@ -8,11 +8,11 @@ public class GoapAction
     public Action<WorldState> Effect { get; }
 
 
-    public GoapAction(string name, float cost, Predicate<WorldState> pre, Action<WorldState> effect)
+    public GoapAction(string name, float cost, Predicate<WorldState> precondition, Action<WorldState> effect)
     {
         Name = name;
         Cost = cost;
-        Precondition = pre;
+        Precondition = precondition;
         Effect = effect;
     }
 }
