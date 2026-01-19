@@ -1,11 +1,7 @@
 ﻿namespace VirtualVillage;
 
-public class Location
+public readonly record struct Location(int X, int Y)
 {
-    public int X = 0;
-    public int Y = 0;
-
-    public Location Clone() => new() { X = X, Y = Y };
-
-    public override string ToString() => $"({X},{Y})";
+    public int DistanceTo(Location other)
+        => Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
 }

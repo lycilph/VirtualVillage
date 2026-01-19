@@ -3,82 +3,89 @@
 
 public static class Planner
 {
-    public class Node
+    public static List<GoapAction> Plan(
+       WorldState start,
+       string agentId,
+       Predicate<WorldState> goal,
+       IEnumerable<GoapAction> actions,
+       bool debug = false,
+       int maxIterations = 1000)
     {
-        public WorldState State;
-        public GoapAction? Action;
-        public Node? Parent;
-        public float G; // Cost from start
-        public float H;
-        public float F;
+        var open = new PriorityQueue<PlanNode, float>();
+        var closed = new HashSet<string>();
 
-        public Node(WorldState state, GoapAction? action, Node? parent, float g)
-        {
-            State = state;
-            Action = action;
-            Parent = parent;
-            G = g;
-        }
-    }
+        var startNode = new PlanNode(
+            state: start.Clone(),
+            parent: null,
+            action: null,
+            g: 0,
+            h: GoapHeuristics.DistanceToRelevantEntity(start, agentId, goal)
+        );
+        open.Enqueue(startNode, startNode.F);
 
-    public static List<GoapAction> Plan(WorldState start, Predicate<WorldState> goal, List<GoapAction> actions, bool debug = true)
-    {
-        var openList = new List<Node> { new Node(start.Clone(), null, null, 0) };
-        var closedList = new HashSet<string>();
         int iterations = 0;
 
-        if (debug) Console.WriteLine("\n--- Starting Trace ---");
-
-        while (openList.Count > 0)
+        while (open.Count > 0 && iterations++ < maxIterations)
         {
-            iterations++;
+            var current = open.Dequeue();
+            var key = WorldStateKey.Compute(current.State);
 
-            var current = openList.OrderBy(n => n.G).First();
-            openList.Remove(current);
-            
+            if (closed.Contains(key))
+                continue;
+
             if (debug)
             {
-                string actionName = current.Action?.Name ?? "START";
-                Console.WriteLine($"[Iter {iterations}] Expanding: {actionName} | State: {current.State} | Cost: {current.G}");
+                Console.WriteLine(
+                    $"[{iterations}] G={current.G:0.0} H={current.H:0.0} F={current.F:0.0} " +
+                    $"Action={current.Action?.ToString() ?? "START"}");
             }
 
             if (goal(current.State))
-            {
-                if (debug) Console.WriteLine($"Goal Found in {iterations} iterations!");
                 return ReconstructPlan(current);
-            }
 
-            closedList.Add(current.State.ToString());
+            closed.Add(key);
 
             foreach (var action in actions)
             {
-                if (action.Precondition(current.State))
-                {
-                    var nextState = current.State.Clone();
-                    action.Effect(nextState);
+                if (!action.Precondition(current.State))
+                    continue;
 
-                    if (closedList.Contains(nextState.ToString()))
-                    {
-                        if (debug) Console.WriteLine($"  - Skipping {action.Name} (State already visited)");
-                        continue;
-                    }
+                var nextState = current.State.Clone();
+                action.Effect(nextState);
 
-                    if (debug) Console.WriteLine($"  + Adding Potential Action: {action.Name}"); 
-                    openList.Add(new Node(nextState, action, current, current.G + action.Cost));
-                }
+                var nextKey = WorldStateKey.Compute(nextState);
+                if (closed.Contains(nextKey))
+                    continue;
+
+                var g = current.G + action.Cost;
+                var h = GoapHeuristics.DistanceToRelevantEntity(
+                    nextState, agentId, goal);
+
+                var node = new PlanNode(
+                    state: nextState,
+                    parent: current,
+                    action: action,
+                    g: g,
+                    h: h
+                );
+
+                open.Enqueue(node, node.F);
             }
         }
-        return new List<GoapAction>(); // No plan found
+
+        return new List<GoapAction>();
     }
 
-    private static List<GoapAction> ReconstructPlan(Node node)
+    private static List<GoapAction> ReconstructPlan(PlanNode node)
     {
         var plan = new List<GoapAction>();
-        while (node?.Action != null)
+
+        while (node.Action != null)
         {
             plan.Insert(0, node.Action);
             node = node.Parent!;
         }
+
         return plan;
     }
 }
