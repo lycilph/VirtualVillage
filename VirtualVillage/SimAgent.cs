@@ -37,6 +37,7 @@ public class SimAgent
         {
             Console.WriteLine($"Agent {Id}: Goal achieved!");
             CurrentPlan.Clear();
+            currentGoal = null;
             return;
         }
 

@@ -5,18 +5,14 @@ public static class GoapHeuristics
     public static float DistanceToRelevantEntity(
         WorldState state,
         string agentId,
-        Predicate<WorldState> goal)
+        GoapAction action)
     {
-        // If already at goal, cost is zero
-        if (goal(state))
+        if (action.TargetEntityId == null)
             return 0;
 
         var agent = state.Agents[agentId];
+        var actionLocation = state.Entities[action.TargetEntityId].Location;
 
-        // Estimate distance to nearest entity (safe lower bound)
-        return state.Entities.Values
-            .Select(e => agent.Location.DistanceTo(e.Location))
-            .DefaultIfEmpty(0)
-            .Min();
+        return agent.Location.DistanceTo(actionLocation);
     }
 }

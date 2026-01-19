@@ -19,7 +19,7 @@ public static class Planner
             parent: null,
             action: null,
             g: 0,
-            h: GoapHeuristics.DistanceToRelevantEntity(start, agentId, goal)
+            h: 0
         );
         open.Enqueue(startNode, startNode.F);
 
@@ -50,16 +50,15 @@ public static class Planner
                 if (!action.Precondition(current.State))
                     continue;
 
+
                 var nextState = current.State.Clone();
+                var g = current.G + action.Cost;
+                var h = GoapHeuristics.DistanceToRelevantEntity(nextState, agentId, action); // Must happen BEFORE action effect is applied
                 action.Effect(nextState);
 
                 var nextKey = WorldStateKey.ComputeHash(nextState);
                 if (closed.Contains(nextKey))
                     continue;
-
-                var g = current.G + action.Cost;
-                var h = GoapHeuristics.DistanceToRelevantEntity(
-                    nextState, agentId, goal);
 
                 var node = new PlanNode(
                     state: nextState,
