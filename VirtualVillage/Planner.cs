@@ -9,7 +9,7 @@ public static class Planner
        Predicate<WorldState> goal,
        IEnumerable<GoapAction> actions,
        bool debug = false,
-       int maxIterations = 1000)
+       int maxIterations = 10000)
     {
         var open = new PriorityQueue<PlanNode, float>();
         var closed = new HashSet<int>();

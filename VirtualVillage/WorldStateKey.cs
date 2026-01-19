@@ -13,6 +13,8 @@ public static class WorldStateKey
         {
             hash.Add(id);
             hash.Add(agent.Location);
+            hash.Add(agent.Energy);
+            hash.Add(agent.MaxEnergy);
             foreach (var (item, count) in agent.Inventory.OrderBy(kv => kv.Key))
             {
                 hash.Add(item);

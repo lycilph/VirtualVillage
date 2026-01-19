@@ -1,7 +1,9 @@
 ﻿namespace VirtualVillage;
 
 /*
-show how to prevent action explosion cleanly
+Add “must rest” emergent goals
+
+Add home ownership
 */
 
 class Program
@@ -35,8 +37,9 @@ class Program
         sim.Providers.Add(new MovementProvider());
 
         // Add agents with goals
-        sim.Agents.Add(new SimAgent("villager_1", goal: s => s.Entities["storehouse_1"].Resources.GetValueOrDefault("Wood") >= 6));
-        //sim.Agents.Add(new SimAgent("villager_2", goal: s => s.Agents["villager_2"].Inventory.GetValueOrDefault("Wood") >= 1));
+        var energy_policy = new EnergyPolicy(MustRestBelow: 2, SatisfiedAbove: 6);
+        sim.Agents.Add(new SimAgent("villager_1", goal: s => s.Entities["storehouse_1"].Resources.GetValueOrDefault("Wood") >= 6, energy_policy));
+        sim.Agents.Add(new SimAgent("villager_2", goal: s => s.Agents["villager_2"].Inventory.GetValueOrDefault("Wood") >= 1, energy_policy));
 
         int iteration = 0;
         while (true)
