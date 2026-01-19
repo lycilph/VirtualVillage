@@ -12,13 +12,20 @@ public sealed class MovementProvider : IActionProvider
                 name: "MoveTo " + entity.Location,
                 cost: 1,
                 targetEntityId: entity.Id,
-                precondition: s => s.Agents[agentId].Location != entity.Location,
+                precondition: s =>
+                {
+                    var agent = s.Agents[agentId];
+
+                    return agent.Location != entity.Location && 
+                           agent.Energy >= 1;
+                },
                 effect: s =>
                 {
                     var agent = s.Agents[agentId];
                     s.Agents[agentId] = agent with
                     {
-                        Location = entity.Location
+                        Location = entity.Location,
+                        Energy = agent.Energy - 1,
                     };
                 });
         }

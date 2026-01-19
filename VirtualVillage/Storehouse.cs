@@ -15,6 +15,7 @@ public sealed class Storehouse : Entity
             {
                 var agent = s.Agents[agentId];
                 return agent.Location == Location &&
+                       agent.Energy >= 1 &&
                        agent.Inventory.GetValueOrDefault("Wood") > 0;
             },
             effect: s =>
@@ -24,7 +25,8 @@ public sealed class Storehouse : Entity
 
                 s.Agents[agentId] = agent with
                 {
-                    Inventory = agent.Inventory.WithDelta("Wood", -1)
+                    Inventory = agent.Inventory.WithDelta("Wood", -1),
+                    Energy = agent.Energy - 1,
                 };
 
                 s.Entities[Id] = storehouse with

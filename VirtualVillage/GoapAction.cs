@@ -13,9 +13,9 @@ public class GoapAction
     public GoapAction(
         string name,
         float cost,
+        string? targetEntityId,
         Predicate<WorldState> precondition,
-        Action<WorldState> effect,
-        string? targetEntityId = null)
+        Action<WorldState> effect)
     {
         Name = name;
         Cost = cost;

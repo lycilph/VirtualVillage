@@ -12,7 +12,7 @@ public static class Planner
        int maxIterations = 1000)
     {
         var open = new PriorityQueue<PlanNode, float>();
-        var closed = new HashSet<string>();
+        var closed = new HashSet<int>();
 
         var startNode = new PlanNode(
             state: start.Clone(),
@@ -28,7 +28,7 @@ public static class Planner
         while (open.Count > 0 && iterations++ < maxIterations)
         {
             var current = open.Dequeue();
-            var key = WorldStateKey.Compute(current.State);
+            var key = WorldStateKey.ComputeHash(current.State);
 
             if (closed.Contains(key))
                 continue;
@@ -53,7 +53,7 @@ public static class Planner
                 var nextState = current.State.Clone();
                 action.Effect(nextState);
 
-                var nextKey = WorldStateKey.Compute(nextState);
+                var nextKey = WorldStateKey.ComputeHash(nextState);
                 if (closed.Contains(nextKey))
                     continue;
 

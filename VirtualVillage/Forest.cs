@@ -17,6 +17,7 @@ public sealed class Forest : Entity
                 var forest = s.Entities[Id];
 
                 return agent.Location == forest.Location &&
+                       agent.Energy >= 2 &&
                        forest.Resources.GetValueOrDefault("Trees") > 0;
             },
             effect: s =>
@@ -31,7 +32,8 @@ public sealed class Forest : Entity
 
                 s.Agents[agentId] = agent with
                 {
-                    Inventory = agent.Inventory.WithDelta("Wood", +1)
+                    Inventory = agent.Inventory.WithDelta("Wood", +1),
+                    Energy = agent.Energy - 2,
                 };
             });
     }

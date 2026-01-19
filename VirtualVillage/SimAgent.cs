@@ -16,10 +16,21 @@ public class SimAgent
 
     public void Tick(WorldState world, List<GoapAction> availableActions)
     {
+        if (Goal(world))
+        {
+            Console.WriteLine($"Agent {Id}: Goal achieved!");
+            CurrentPlan.Clear();
+            return;
+        }
+
         // Re-plan if needed
         if (CurrentPlan.Count == 0 || planIndex >= CurrentPlan.Count)
         {
-            CurrentPlan = Planner.Plan(world, Id, Goal, availableActions, debug: false);
+            Console.WriteLine($"Available actions for Agent {Id}:");
+            foreach (var a in availableActions)
+                Console.WriteLine(" * " + a);
+
+            CurrentPlan = Planner.Plan(world, Id, Goal, availableActions, debug: true);
             planIndex = 0;
             if (CurrentPlan.Count == 0)
             {
@@ -34,7 +45,7 @@ public class SimAgent
         // Check if action is still valid
         if (action.Precondition(world))
         {
-            Console.WriteLine($"Agent {Id} executes: {action}");
+            Console.WriteLine($"Agent {Id} executes: {action} [Energy: {world.Agents[Id].Energy}]");
             action.Effect(world);
             planIndex++;
         }
