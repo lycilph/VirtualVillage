@@ -1,40 +1,58 @@
 ﻿namespace VirtualVillage;
 
-public class WorldState
+public class WorldState : Dictionary<string, object>
 {
-    public Dictionary<string, AgentState> Agents { get; init; } = new();
-    public Dictionary<string, EntityState> Entities { get; init; } = new();
+    public WorldState() : base() { }
 
-    public WorldState Clone()
+    // Copy constructor
+    public WorldState(IDictionary<string, object> dictionary) : base(dictionary) { }
+
+    // Note: If 'object' is a custom class, you'll need a deep copy logic.
+    public WorldState Clone() => new(this);
+
+    public override int GetHashCode()
     {
-        return new WorldState
+        unchecked
         {
-            Agents = Agents.ToDictionary(
-                kv => kv.Key,
-                kv => kv.Value with
-                {
-                    Inventory = new Dictionary<string, int>(kv.Value.Inventory)
-                }),
+            int hash = 17;
+            foreach (var kvp in this)
+            {
+                // Key hash
+                int kvpHash = kvp.Key.GetHashCode();
+                // Value hash (handle nulls just in case)
+                kvpHash ^= (kvp.Value?.GetHashCode() ?? 0);
 
-            Entities = Entities.ToDictionary(
-                kv => kv.Key,
-                kv => kv.Value with
-                {
-                    Resources = new Dictionary<string, int>(kv.Value.Resources)
-                })
-        };
+                // Use addition so that the order of keys doesn't change the hash
+                hash = hash + kvpHash;
+            }
+            return hash;
+        }
     }
 
-    public override string ToString()
+    public override bool Equals(object? obj)
     {
-        var agents = string.Join("|",
-            Agents.Values.Select(a =>
-                $"{a.Id}@{a.Location}[{string.Join(",", a.Inventory)}]"));
+        if (obj == null) return false;
+        
+        if (ReferenceEquals(this, obj)) return true;
 
-        var entities = string.Join("|",
-            Entities.Values.Select(e =>
-                $"{e.Id}:{e.Kind}@{e.Location}[{string.Join(",", e.Resources)}]"));
+        if (obj is not WorldState other || Count != other.Count)
+            return false;
 
-        return $"A:{agents} E:{entities}";
+        foreach (var kvp in this)
+        {
+            if (!other.TryGetValue(kvp.Key, out object? otherValue))
+                return false;
+
+            // Use Equals() to compare the content of the objects, not just references
+            if (kvp.Value == null)
+            {
+                if (otherValue != null) return false;
+            }
+            else if (!kvp.Value.Equals(otherValue))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

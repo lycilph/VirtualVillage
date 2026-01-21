@@ -2,30 +2,24 @@
 
 public class GoapAction
 {
+    public int Id { get; }
     public string Name { get; }
     public float Cost { get; }
 
-    public string? TargetEntityId { get; }
+    public Entity? Entity { get; }
 
     public Predicate<WorldState> Precondition { get; }
     public Action<WorldState> Effect { get; }
 
-    public GoapAction(
-        string name,
-        float cost,
-        string? targetEntityId,
-        Predicate<WorldState> precondition,
-        Action<WorldState> effect)
+    public GoapAction(string name, float cost, Predicate<WorldState> precondition, Action<WorldState> effect, Entity? entity = null)
     {
+        Id = IdGenerator.Next();
         Name = name;
         Cost = cost;
-        TargetEntityId = targetEntityId;
+        Entity = entity;
         Precondition = precondition;
         Effect = effect;
     }
 
-    public override string ToString()
-        => TargetEntityId is null
-            ? Name
-            : $"{Name} [{TargetEntityId}]";
+    public override string ToString() => Entity is null ? $"{Name} - cost {Cost}" : $"{Name} [{Entity}] - cost {Cost}";
 }

@@ -1,40 +1,17 @@
-﻿namespace VirtualVillage;
+﻿
+namespace VirtualVillage;
 
-public sealed class Forest : Entity
+public class Forest(Location location) : Entity("Forest", location)
 {
-    public Forest(string id, Location location)
-        : base(id, location) { }
-
-    public override IEnumerable<GoapAction> GetActions(string agentId, WorldState state)
+    public override IEnumerable<GoapAction> GetProvidedActions()
     {
         yield return new GoapAction(
-            name: "ChopTree",
-            cost: 2,
-            targetEntityId: Id,
-            precondition: s =>
-            {
-                var agent = s.Agents[agentId];
-                var forest = s.Entities[Id];
-
-                return agent.Location == forest.Location &&
-                       agent.Energy >= 2 &&
-                       forest.Resources.GetValueOrDefault("Trees") > 0;
-            },
-            effect: s =>
-            {
-                var agent = s.Agents[agentId];
-                var forest = s.Entities[Id];
-
-                s.Entities[Id] = forest with
-                {
-                    Resources = forest.Resources.WithDelta("Trees", -1)
-                };
-
-                s.Agents[agentId] = agent with
-                {
-                    Inventory = agent.Inventory.WithDelta("Wood", +1),
-                    Energy = agent.Energy - 2,
-                };
-            });
+            "Chop Wood",
+            5,
+            s => s.TryGetValue("agent_location", out var value) && 
+                value is Location agent_location && 
+                Location.DistanceTo(agent_location) == 0,
+            s => { },
+            this);
     }
 }
