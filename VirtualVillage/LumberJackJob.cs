@@ -11,8 +11,7 @@ public sealed class LumberjackJob : Job
 
     public override bool AllowsAction(GoapAction action)
     {
-        return action.Tags.Contains("Wood") ||
-               action.Tags.Contains("Movement") ||
-               action.Tags.Contains("Storage");
+        return action.Tags.Contains("All") ||
+               action.Tags.Contains("Lumberjack");
     }
 }

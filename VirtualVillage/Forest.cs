@@ -1,5 +1,4 @@
-﻿
-namespace VirtualVillage;
+﻿namespace VirtualVillage;
 
 public class Forest : Entity
 {
@@ -23,6 +22,7 @@ public class Forest : Entity
                     s.Dec(GetStateKey("wood"), 1);
                 })
             .WithEntity(this)
+            .WithTag("Lumberjack")
             .Build());
     }
 

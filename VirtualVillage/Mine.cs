@@ -10,19 +10,20 @@ public class Mine : Entity
     {
         OreRemaining = oreRemaining;
 
-        var chop = new GoapAction.Builder("Mine ore", 5)
+        actions.Add(
+            new GoapAction.Builder("Mine ore", 5)
             .WithPrecondition(s =>
                 s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
                 s.Get<int>("agent_pickaxe") > 0 &&
                 s.Get<int>(GetStateKey("ore")) > 0)
             .WithEffect(s =>
-            {
-                s.Inc("agent_ore", 1);
-                s.Dec(GetStateKey("ore"), 1);
-            })
+                {
+                    s.Inc("agent_ore", 1);
+                    s.Dec(GetStateKey("ore"), 1);
+                })
             .WithEntity(this)
-            .Build();
-        actions.Add(chop);
+            .WithTag("Miner")
+            .Build());
     }
 
     public override void Update(WorldState state)

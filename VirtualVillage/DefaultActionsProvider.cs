@@ -11,12 +11,14 @@ public class DefaultActionsProvider : IActionProvider
             new GoapAction.Builder("Scavenge Wood", 50)
             .WithPrecondition(s => true)
             .WithEffect(s => s.Inc("agent_wood", 1))
+            .WithTag("Lumberjack")
             .Build());
 
         actions.Add(
             new GoapAction.Builder("Scavenge Ore", 50)
             .WithPrecondition(s => true)
             .WithEffect(s => s.Inc("agent_ore", 1))
+            .WithTag("Miner")
             .Build());
     }
 

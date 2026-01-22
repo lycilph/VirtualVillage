@@ -24,6 +24,7 @@ public class Storehouse : Entity
                 s.Dec(GetStateKey("axe"), 1);
             })
             .WithEntity(this)
+            .WithTag("All")
             .Build());
 
         actions.Add(
@@ -37,6 +38,7 @@ public class Storehouse : Entity
                 s.Dec(GetStateKey("pickaxe"), 1);
             })
             .WithEntity(this)
+            .WithTag("All")
             .Build());
 
         actions.Add(
@@ -50,6 +52,7 @@ public class Storehouse : Entity
                 s.Dec("agent_axe", 1);
             })
             .WithEntity(this)
+            .WithTag("All")
             .Build());
 
         actions.Add(
@@ -63,6 +66,7 @@ public class Storehouse : Entity
                 s.Inc(GetStateKey("wood"), 1);
             })
             .WithEntity(this)
+            .WithTag("All")
             .Build());
 
         actions.Add(
@@ -76,6 +80,7 @@ public class Storehouse : Entity
                 s.Inc(GetStateKey("ore"), 1);
             })
             .WithEntity(this)
+            .WithTag("All")
             .Build());
     }
 

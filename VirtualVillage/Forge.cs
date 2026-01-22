@@ -19,6 +19,7 @@ public class Forge : Entity
                 s.Inc("agent_axe", 1);
             })
             .WithEntity(this)
+            .WithTag("Blacksmith")
             .Build());
     }
 

@@ -14,6 +14,7 @@ public class MovementProvider(World world) : IActionProvider
                 new GoapAction.Builder($"MoveTo{entity}", 1)
                 .WithPrecondition(s => s.Get<Location>("agent_location").DistanceTo(entity.Location) > 0)
                 .WithEffect(s => s["agent_location"] = entity.Location )
+                .WithTag("All")
                 .Build());
 
         return actions;
