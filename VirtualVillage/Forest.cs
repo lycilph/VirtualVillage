@@ -3,8 +3,6 @@ namespace VirtualVillage;
 
 public class Forest : Entity
 {
-    private readonly string wood_key;
-
     public int WoodRemaining { get; }
 
     private readonly List<GoapAction> actions = [];
@@ -13,18 +11,16 @@ public class Forest : Entity
     {
         WoodRemaining = woodRemaining;
 
-        wood_key = GetStateKey("wood");
-
         actions.Add(
             new GoapAction.Builder("Chop Wood", 5)
             .WithPrecondition(s => 
                 s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
                 s.Get<int>("agent_axe") > 0 &&
-                s.Get<int>(wood_key) > 0)
+                s.Get<int>(GetStateKey("wood")) > 0)
             .WithEffect(s => 
                 {
                     s.Inc("agent_wood", 1);
-                    s.Dec(wood_key, 1);
+                    s.Dec(GetStateKey("wood"), 1);
                 })
             .WithEntity(this)
             .Build());
@@ -32,7 +28,7 @@ public class Forest : Entity
 
     public override void Update(WorldState state)
     {
-        state[wood_key] = WoodRemaining;
+        state[GetStateKey("wood")] = WoodRemaining;
     }
 
     public override IEnumerable<GoapAction> GetProvidedActions() => actions;

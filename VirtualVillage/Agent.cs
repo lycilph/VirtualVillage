@@ -1,10 +1,11 @@
 ﻿namespace VirtualVillage;
 
-public class Agent(string name, Location location)
+public class Agent(string name, Job job, Location location)
 {
     public int Id { get; } = IdGenerator.Next();
     public string Name { get; } = name;
     public Location Location { get; } = location;
+    public Job Job { get; } = job;
 
     public void Update(WorldState state)
     {

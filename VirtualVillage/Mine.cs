@@ -2,8 +2,6 @@
 
 public class Mine : Entity
 {
-    private readonly string ore_key;
-
     public int OreRemaining { get; }
 
     private readonly List<GoapAction> actions = [];
@@ -12,17 +10,15 @@ public class Mine : Entity
     {
         OreRemaining = oreRemaining;
 
-        ore_key = GetStateKey("ore");
-
         var chop = new GoapAction.Builder("Mine ore", 5)
             .WithPrecondition(s =>
                 s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
                 s.Get<int>("agent_pickaxe") > 0 &&
-                s.Get<int>(ore_key) > 0)
+                s.Get<int>(GetStateKey("ore")) > 0)
             .WithEffect(s =>
             {
                 s.Inc("agent_ore", 1);
-                s.Dec(ore_key, 1);
+                s.Dec(GetStateKey("ore"), 1);
             })
             .WithEntity(this)
             .Build();
@@ -31,7 +27,7 @@ public class Mine : Entity
 
     public override void Update(WorldState state)
     {
-        state[ore_key] = OreRemaining;
+        state[GetStateKey("ore")] = OreRemaining;
     }
 
     public override IEnumerable<GoapAction> GetProvidedActions() => actions;

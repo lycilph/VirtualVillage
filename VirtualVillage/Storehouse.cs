@@ -3,10 +3,10 @@ namespace VirtualVillage;
 
 public class Storehouse : Entity
 {
-    public int StoredAxes { get; set;  }
-    public int StoredPickaxes { get; set;  }
-    public int StoredWood { get; set; }
-    public int StoredOre { get; set; }
+    public int Axes { get; set;  }
+    public int Pickaxes { get; set;  }
+    public int Wood { get; set; }
+    public int Ore { get; set; }
 
 
     private readonly List<GoapAction> actions = [];
@@ -17,11 +17,11 @@ public class Storehouse : Entity
             new GoapAction.Builder("Pickup Axe", 1)
             .WithPrecondition(s =>
                 s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
-                s.Get<int>(GetStateKey("stored_axes")) > 0)
+                s.Get<int>(GetStateKey("axe")) > 0)
             .WithEffect(s =>
             {
                 s.Inc("agent_axe", 1);
-                s.Dec(GetStateKey("stored_axes"), 1);
+                s.Dec(GetStateKey("axe"), 1);
             })
             .WithEntity(this)
             .Build());
@@ -30,11 +30,11 @@ public class Storehouse : Entity
             new GoapAction.Builder("Pickup Pickaxe", 1)
             .WithPrecondition(s =>
                 s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
-                s.Get<int>(GetStateKey("stored_pickaxes")) > 0)
+                s.Get<int>(GetStateKey("pickaxe")) > 0)
             .WithEffect(s =>
             {
                 s.Inc("agent_pickaxe", 1);
-                s.Dec(GetStateKey("stored_pickaxes"), 1);
+                s.Dec(GetStateKey("pickaxe"), 1);
             })
             .WithEntity(this)
             .Build());
@@ -46,7 +46,7 @@ public class Storehouse : Entity
                 s.Get<int>("agent_axe") > 0)
             .WithEffect(s =>
             {
-                s.Inc("stored_axes", 1);
+                s.Inc(GetStateKey("axe"), 1);
                 s.Dec("agent_axe", 1);
             })
             .WithEntity(this)
@@ -60,7 +60,7 @@ public class Storehouse : Entity
             .WithEffect(s =>
             {
                 s.Dec("agent_wood", 1);
-                s.Inc("stored_wood", 1);
+                s.Inc(GetStateKey("wood"), 1);
             })
             .WithEntity(this)
             .Build());
@@ -73,7 +73,7 @@ public class Storehouse : Entity
             .WithEffect(s =>
             {
                 s.Dec("agent_ore", 1);
-                s.Inc("stored_ore", 1);
+                s.Inc(GetStateKey("ore"), 1);
             })
             .WithEntity(this)
             .Build());
@@ -81,10 +81,10 @@ public class Storehouse : Entity
 
     public override void Update(WorldState state) 
     {
-        state[GetStateKey("stored_axes")] = StoredAxes;
-        state[GetStateKey("stored_pickaxes")] = StoredPickaxes;
-        state[GetStateKey("stored_wood")] = StoredWood;
-        state[GetStateKey("stored_ore")] = StoredOre;
+        state[GetStateKey("axe")] = Axes;
+        state[GetStateKey("pickaxe")] = Pickaxes;
+        state[GetStateKey("wood")] = Wood;
+        state[GetStateKey("ore")] = Ore;
     }
 
     public override IEnumerable<GoapAction> GetProvidedActions() => actions;

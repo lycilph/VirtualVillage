@@ -2,10 +2,14 @@
 
 class Program
 {
+    // TODO: Add multiple agents (miner, lumberjack and blacksmith)
+    // * Only miner can mine
+    // * Only lumberjack can cut wood
+    // * Only blacksmith can forge tools
 
     static void Main()
     {
-        var agent = new Agent("Bob", new Location(0, 0));
+        var agent = new Agent("Bob", new LumberjackJob(), new Location(0, 0));
         var forest = new Forest(new Location(5, 5), 5);
         var mine = new Mine(new Location(-5, 2), 10);
         var storehouse = new Storehouse(new Location(0, 1));
@@ -19,35 +23,29 @@ class Program
         world.Entities.Add(forge);
         Console.WriteLine(world);
 
-        storehouse.StoredAxes = 1;
-        storehouse.StoredPickaxes = 1;
+        storehouse.Axes = 0;
+        storehouse.Pickaxes = 1;
 
         var state = world.GetWorldState(world.Agents.First());
+        Console.WriteLine(state);
+
         var actions = world.GetActions();
 
-        //var goal = new Goal.Builder("Collect Wood")
-        //    .WithDesiredState(s => s.Get<int>("stored_wood") > 2)
-        //    .Build();
-        //var goal = new Goal.Builder("Collect Ore")
-        //    .WithDesiredState(s => s.Get<int>("stored_ore") > 1)
-        //    .Build();
-        var goal = new Goal.Builder("Craft Axe")
-            .WithDesiredState(s => s.Get<int>("stored_axes") > 0)
-            .Build();
+        var goal = GoalFactory.StoreAxe(world, agent);
 
-        var tracer = new ConsolePlannerTracer();
+        //var tracer = new ConsolePlannerTracer();
 
-        var plan = Planner.Plan(state, actions, goal, tracer);
-        //if (plan == null || plan.Count == 0)
-        //{
-        //    Console.WriteLine("No plan found...");
-        //}
-        //else
-        //{
-        //    Console.WriteLine("Plan:");
-        //    foreach (var action in plan)
-        //        Console.WriteLine(action);
-        //}
+        var plan = Planner.Plan(state, actions, goal);
+        if (plan == null || plan.Count == 0)
+        {
+            Console.WriteLine("No plan found...");
+        }
+        else
+        {
+            Console.WriteLine("Plan:");
+            foreach (var action in plan)
+                Console.WriteLine(action);
+        }
 
         Console.Write("Press any key to continue...");
         Console.ReadKey();
