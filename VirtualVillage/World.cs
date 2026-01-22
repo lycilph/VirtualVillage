@@ -4,8 +4,29 @@ namespace VirtualVillage;
 
 public class World
 {
+    private MovementProvider movementProvider;
+
     public List<Entity> Entities { get; } = [];
     public List<Agent> Agents { get; } = [];
+
+    public World()
+    {
+        movementProvider = new MovementProvider(this);
+    }
+
+    public WorldState GetWorldState(Agent agent)
+    {
+        var state = new WorldState();
+        
+        agent.Update(state);
+
+        foreach (var entity in Entities)
+            entity.Update(state);
+
+        return state;
+    }
+
+    public List<GoapAction> GetActions() => [.. Entities.SelectMany(e => e.GetProvidedActions()), .. movementProvider.GetProvidedActions()];
 
     public override string ToString()
     {

@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="UnitTests/UnitTests.csproj" Id="b863f526-7d9c-4d16-861e-7eeab22be141" />
   <Project Path="VirtualVillage/VirtualVillage.csproj" Id="a1e0a300-1375-4e15-9760-3ccfabb53859" />
 </Solution>

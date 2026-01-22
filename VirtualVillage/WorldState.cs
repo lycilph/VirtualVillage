@@ -1,4 +1,6 @@
-﻿namespace VirtualVillage;
+﻿using System.Text;
+
+namespace VirtualVillage;
 
 public class WorldState : Dictionary<string, object>
 {
@@ -9,6 +11,19 @@ public class WorldState : Dictionary<string, object>
 
     // Note: If 'object' is a custom class, you'll need a deep copy logic.
     public WorldState Clone() => new(this);
+
+    public void Inc(string key, int delta) => this[key] = Get<int>(key) + delta;
+
+    public void Dec(string key, int delta) => this[key] = Get<int>(key) - delta;
+
+    public void Set(string key, object value) => this[key] = value;
+
+    public T Get<T>(string key) where T : struct
+    {
+        if (TryGetValue(key, out object? value) && value is T typedValue)
+            return typedValue;
+        return default;
+    }
 
     public override int GetHashCode()
     {
@@ -54,5 +69,13 @@ public class WorldState : Dictionary<string, object>
             }
         }
         return true;
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        foreach (var kvp in this)
+            sb.AppendLine($"{kvp.Key} {kvp.Value}");
+        return sb.ToString();
     }
 }

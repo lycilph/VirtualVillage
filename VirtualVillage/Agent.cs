@@ -6,7 +6,7 @@ public class Agent(string name, Location location)
     public string Name { get; } = name;
     public Location Location { get; } = location;
 
-    public void Update(World world, WorldState state)
+    public void Update(WorldState state)
     {
         state["agent_location"] = Location;
     }

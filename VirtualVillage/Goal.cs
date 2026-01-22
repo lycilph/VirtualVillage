@@ -1,8 +1,19 @@
 ﻿namespace VirtualVillage;
 
-public class Goal(string name, Predicate<WorldState> desiredState)
+public class Goal(string name) : IdentifiableBase(name)
 {
-    public int Id { get; } = IdGenerator.Next();
-    public string Name { get; } = name;
-    public Predicate<WorldState> DesiredState { get; } = desiredState;
+    public Predicate<WorldState> DesiredState { get; private set; } = s => false;
+
+    public class Builder(string name)
+    {
+        private readonly Goal goal = new(name);
+
+        public Builder WithDesiredState(Predicate<WorldState> state)
+        {
+            goal.DesiredState = state;
+            return this;
+        }
+
+        public Goal Build() => goal;
+    }
 }

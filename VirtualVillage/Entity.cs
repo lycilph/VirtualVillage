@@ -1,13 +1,13 @@
 ﻿
 namespace VirtualVillage;
 
-public abstract class Entity(string name, Location location) : IActionProvider
+public abstract class Entity(string name, Location location) : IdentifiableBase(name), IActionProvider
 {
-    public int Id { get; } = IdGenerator.Next();
-    public string Name { get; } = name;
     public Location Location { get; } = location;
 
     public abstract IEnumerable<GoapAction> GetProvidedActions();
+
+    public abstract void Update(WorldState state);
 
     public override string ToString() => $"{Name}[{Id}] {Location}";
 }

@@ -1,25 +1,38 @@
 ﻿namespace VirtualVillage;
 
-public class GoapAction
+public class GoapAction(string name, float cost) : IdentifiableBase(name)
 {
-    public int Id { get; }
-    public string Name { get; }
-    public float Cost { get; }
+    public float Cost { get; } = cost;
 
-    public Entity? Entity { get; }
+    public Entity? Entity { get; private set; } = null;
 
-    public Predicate<WorldState> Precondition { get; }
-    public Action<WorldState> Effect { get; }
+    public Predicate<WorldState> Precondition { get; private set; } = s => false;
+    public Action<WorldState> Effect { get; private set; } = s => { /* no-op */ };
 
-    public GoapAction(string name, float cost, Predicate<WorldState> precondition, Action<WorldState> effect, Entity? entity = null)
+    public override string ToString() => Entity is null ? $"{Name}[{Id}] - cost {Cost}" : $"{Name}[{Id}] [{Entity}] - cost {Cost}";
+
+    public class Builder(string name, float cost)
     {
-        Id = IdGenerator.Next();
-        Name = name;
-        Cost = cost;
-        Entity = entity;
-        Precondition = precondition;
-        Effect = effect;
-    }
+        private readonly GoapAction action = new(name, cost);
 
-    public override string ToString() => Entity is null ? $"{Name} - cost {Cost}" : $"{Name} [{Entity}] - cost {Cost}";
+        public Builder WithPrecondition(Predicate<WorldState> precondition)
+        {
+            action.Precondition = precondition;
+            return this;
+        }
+
+        public Builder WithEffect(Action<WorldState> effect)
+        {
+            action.Effect = effect;
+            return this;
+        }
+
+        public Builder WithEntity(Entity entity)
+        {
+            action.Entity = entity;
+            return this;
+        }
+
+        public GoapAction Build() => action;
+    }
 }
