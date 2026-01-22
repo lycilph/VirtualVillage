@@ -19,11 +19,10 @@ class Program
         world.Entities.Add(forge);
         Console.WriteLine(world);
 
+        storehouse.StoredAxes = 1;
         storehouse.StoredPickaxes = 1;
 
         var state = world.GetWorldState(world.Agents.First());
-        Console.WriteLine(state);
-
         var actions = world.GetActions();
 
         //var goal = new Goal.Builder("Collect Wood")
@@ -35,15 +34,20 @@ class Program
         var goal = new Goal.Builder("Craft Axe")
             .WithDesiredState(s => s.Get<int>("stored_axes") > 0)
             .Build();
-        Console.WriteLine(goal);
 
-        Console.WriteLine("Plan:");
-        var plan = Planner.Plan(state, actions, goal);
-        if (plan == null || plan.Count == 0)
-            Console.WriteLine("No plan found...");
-        else
-            foreach (var action in plan)
-                Console.WriteLine(action);
+        var tracer = new ConsolePlannerTracer();
+
+        var plan = Planner.Plan(state, actions, goal, tracer);
+        //if (plan == null || plan.Count == 0)
+        //{
+        //    Console.WriteLine("No plan found...");
+        //}
+        //else
+        //{
+        //    Console.WriteLine("Plan:");
+        //    foreach (var action in plan)
+        //        Console.WriteLine(action);
+        //}
 
         Console.Write("Press any key to continue...");
         Console.ReadKey();

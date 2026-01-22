@@ -13,10 +13,12 @@ public class Planner
     public static List<GoapAction>? Plan(
         WorldState startState,
         List<GoapAction> actions,
-        Goal goal)
+        Goal goal,
+        IPlannerTracer? tracer = null)
     {
         var openSet = new PriorityQueue<Node, float>();
         var closedSet = new HashSet<WorldState>();
+        var bestCosts = new Dictionary<WorldState, float>();
 
         var startNode = new Node(
             startState,
@@ -25,8 +27,11 @@ public class Planner
             G: 0,
             F: Heuristic(startState, null, goal)
         );
+        
+        tracer?.Start(startState, goal);
 
         openSet.Enqueue(startNode, startNode.F);
+        bestCosts[startState] = 0;
 
         const int max_nodes = 10000;
         var expanded_nodes = 0;
@@ -34,6 +39,8 @@ public class Planner
         while (openSet.Count > 0)
         {
             var current = openSet.Dequeue();
+
+            tracer?.Expand(current.State, current.G, current.F);
 
             expanded_nodes++;
             if (expanded_nodes > max_nodes)
@@ -43,14 +50,28 @@ public class Planner
             }
 
             if (goal.DesiredState(current.State))
-                return ReconstructPlan(current);
+            {
+                tracer?.GoalReached(current.State, expanded_nodes);
+                var plan = ReconstructPlan(current);
+                tracer?.Finished(plan);
+                return plan;
+            }
 
-            closedSet.Add(current.State);
+            if (!closedSet.Add(current.State))
+            {
+                tracer?.Skip("Already closed");
+                continue;
+            }
 
             foreach (var action in actions)
             {
+                tracer?.ConsiderAction(action);
+
                 if (!action.Precondition(current.State))
+                {
+                    tracer?.Skip("Precondition failed");
                     continue;
+                }
 
                 var nextState = current.State.Clone();
                 var heuristic = Heuristic(nextState, action, goal); // Must be done before it is applied to the current state
@@ -62,6 +83,13 @@ public class Planner
                 float g = current.G + action.Cost;
                 float f = g + heuristic;
 
+                if (bestCosts.TryGetValue(nextState, out var best) && best <= g)
+                {
+                    tracer?.Skip($"Higher cost than best ({g} >= {best})");
+                    continue;
+                }
+                bestCosts[nextState] = g;
+
                 var node = new Node(
                     nextState,
                     current,
@@ -70,6 +98,7 @@ public class Planner
                     f
                 );
 
+                tracer?.Enqueue(nextState, g, f);
                 openSet.Enqueue(node, node.F);
             }
         }
