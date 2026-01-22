@@ -3,8 +3,8 @@ namespace VirtualVillage;
 
 public class Storehouse : Entity
 {
-    public int StoredAxes { get; set;  } = 1;
-    public int StoredPickaxes { get; set;  } = 1;
+    public int StoredAxes { get; set;  }
+    public int StoredPickaxes { get; set;  }
     public int StoredWood { get; set; }
     public int StoredOre { get; set; }
 

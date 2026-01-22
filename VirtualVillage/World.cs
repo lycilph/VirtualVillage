@@ -4,7 +4,8 @@ namespace VirtualVillage;
 
 public class World
 {
-    private MovementProvider movementProvider;
+    private readonly MovementProvider movementProvider;
+    private readonly DefaultActionsProvider defaultActionsProvider;
 
     public List<Entity> Entities { get; } = [];
     public List<Agent> Agents { get; } = [];
@@ -12,6 +13,7 @@ public class World
     public World()
     {
         movementProvider = new MovementProvider(this);
+        defaultActionsProvider = new DefaultActionsProvider();
     }
 
     public WorldState GetWorldState(Agent agent)
@@ -26,7 +28,10 @@ public class World
         return state;
     }
 
-    public List<GoapAction> GetActions() => [.. Entities.SelectMany(e => e.GetProvidedActions()), .. movementProvider.GetProvidedActions()];
+    public List<GoapAction> GetActions() => 
+        [.. Entities.SelectMany(e => e.GetProvidedActions()), 
+         .. movementProvider.GetProvidedActions(), 
+         .. defaultActionsProvider.GetProvidedActions()];
 
     public override string ToString()
     {
@@ -46,6 +51,14 @@ public class World
                 sb.AppendLine(" * * " + action);
             }
         }
+
+        sb.AppendLine("Movement actions:");
+        foreach (var action in movementProvider.GetProvidedActions())
+            sb.AppendLine(" * " + action);
+
+        sb.AppendLine("Default actions:");
+        foreach (var action in defaultActionsProvider.GetProvidedActions())
+            sb.AppendLine(" * " + action);
 
         return sb.ToString();
     }

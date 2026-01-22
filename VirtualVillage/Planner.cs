@@ -98,6 +98,8 @@ public class Planner
             current = current.Parent!;
         }
 
+        Console.WriteLine($"Found plan (total cost {node.F}, {plan.Count} steps)");
+
         plan.Reverse();
         return plan;
     }

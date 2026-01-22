@@ -15,7 +15,8 @@ public class Forest : Entity
 
         wood_key = GetStateKey("wood");
 
-        var chop = new GoapAction.Builder("Chop Wood", 5)
+        actions.Add(
+            new GoapAction.Builder("Chop Wood", 5)
             .WithPrecondition(s => 
                 s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
                 s.Get<int>("agent_axe") > 0 &&
@@ -26,8 +27,7 @@ public class Forest : Entity
                     s.Dec(wood_key, 1);
                 })
             .WithEntity(this)
-            .Build();
-        actions.Add(chop);
+            .Build());
     }
 
     public override void Update(WorldState state)

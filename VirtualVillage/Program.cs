@@ -19,14 +19,12 @@ class Program
         world.Entities.Add(forge);
         Console.WriteLine(world);
 
+        storehouse.StoredPickaxes = 1;
+
         var state = world.GetWorldState(world.Agents.First());
         Console.WriteLine(state);
 
         var actions = world.GetActions();
-
-        // Test
-        state["agent_axe"] = 1;
-        storehouse.StoredAxes = 0;
 
         //var goal = new Goal.Builder("Collect Wood")
         //    .WithDesiredState(s => s.Get<int>("stored_wood") > 2)
