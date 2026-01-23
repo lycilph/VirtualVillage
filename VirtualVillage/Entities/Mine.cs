@@ -1,4 +1,4 @@
-﻿namespace VirtualVillage;
+﻿namespace VirtualVillage.Entities;
 
 public class Mine : Entity
 {

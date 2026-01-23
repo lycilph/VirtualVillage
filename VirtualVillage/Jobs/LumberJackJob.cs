@@ -1,4 +1,4 @@
-﻿namespace VirtualVillage;
+﻿namespace VirtualVillage.Jobs;
 
 public sealed class LumberjackJob : Job
 {

@@ -1,5 +1,4 @@
-﻿
-namespace VirtualVillage;
+﻿namespace VirtualVillage.Entities;
 
 public class Storehouse : Entity
 {

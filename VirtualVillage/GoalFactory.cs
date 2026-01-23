@@ -1,4 +1,6 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Entities;
+
+namespace VirtualVillage;
 
 public static class GoalFactory
 {

@@ -1,4 +1,5 @@
 ﻿using VirtualVillage;
+using VirtualVillage.Entities;
 
 namespace UnitTests;
 

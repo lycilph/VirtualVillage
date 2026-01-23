@@ -1,4 +1,6 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Jobs;
+
+namespace VirtualVillage;
 
 public class Agent(string name, Job job, Location location)
 {

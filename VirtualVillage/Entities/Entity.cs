@@ -1,5 +1,4 @@
-﻿
-namespace VirtualVillage;
+﻿namespace VirtualVillage.Entities;
 
 public abstract class Entity(string name, Location location) : IdentifiableBase(name), IActionProvider
 {

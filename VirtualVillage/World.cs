@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using VirtualVillage.Entities;
 
 namespace VirtualVillage;
 

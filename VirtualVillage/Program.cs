@@ -1,23 +1,31 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Entities;
+using VirtualVillage.Jobs;
+
+namespace VirtualVillage;
 
 class Program
 {
+    // TODO: Add plan execution
+    
     // TODO: Add statekeys to agent states
-    // TODO: Add multiple agents (miner, lumberjack and blacksmith)
-    // * Only miner can mine
-    // * Only lumberjack can cut wood
-    // * Only blacksmith can forge tools
+
+    // TODO: Make a class with resources and tool
+    // * Generate pickup and deposit actions in the storehouse automatically
 
     static void Main()
     {
-        var agent = new Agent("Bob", new LumberjackJob(), new Location(0, 0));
+        var lumberjack = new Agent("Bjorn Oakhand", new LumberjackJob(), new Location(0, 0));
+        var miner = new Agent("Borin Ironvein", new MinerJob(), new Location(0, 0));
+        var blacksmith = new Agent("Magnus Ironwright", new BlacksmithJob(), new Location(0, 0));
         var forest = new Forest(new Location(5, 5), 5);
         var mine = new Mine(new Location(-5, 2), 10);
         var storehouse = new Storehouse(new Location(0, 1));
         var forge = new Forge(new Location(-2, -1));
 
         var world = new World();
-        world.Agents.Add(agent);
+        world.Agents.Add(lumberjack);
+        world.Agents.Add(miner);
+        world.Agents.Add(blacksmith);
         world.Entities.Add(forest);
         world.Entities.Add(mine);
         world.Entities.Add(storehouse);
@@ -25,20 +33,17 @@ class Program
         Console.WriteLine(world);
 
         storehouse.Axes = 0;
-        storehouse.Pickaxes = 1;
+        storehouse.Pickaxes = 0;
 
-
-
-        var actions = world.GetActions();
-        var agent_actions = actions.Where(agent.Job.AllowsAction).ToList();
-
-
-
-        //var state = world.GetWorldState(world.Agents.First());
-        //var actions = world.GetActions();
-        //var goal = GoalFactory.StoreAxe(world, agent);
-        //var tracer = new MinimalConsolePlannerTracer();
-        //var plan = Planner.Plan(state, actions, goal, tracer);
+        var tracer = new MinimalConsolePlannerTracer();
+        foreach (var agent in world.Agents)
+        {
+            Console.WriteLine(agent.Name);
+            var state = world.GetWorldState(agent);
+            var actions = world.GetActions().Where(agent.Job.AllowsAction).ToList();
+            var goal = agent.Job.GetGoals(world, agent).First();
+            var plan = Planner.Plan(state, actions, goal, tracer);
+        }
 
         Console.Write("Press any key to continue...");
         Console.ReadKey();
