@@ -31,5 +31,7 @@ public class Forest : Entity
         state[GetStateKey("wood")] = WoodRemaining;
     }
 
+    public override void Render() => Console.WriteLine($"Forest (remaining wood: {WoodRemaining})");
+
     public override IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

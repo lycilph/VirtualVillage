@@ -66,6 +66,7 @@ public class Storehouse : Entity
             })
             .WithEntity(this)
             .WithTag("All")
+            .WithExecution((w, a) => Wood += 1)
             .Build());
 
         actions.Add(
@@ -90,6 +91,8 @@ public class Storehouse : Entity
         state[GetStateKey("wood")] = Wood;
         state[GetStateKey("ore")] = Ore;
     }
+
+    public override void Render() => Console.WriteLine($"Storehouse (Axes: {Axes}, Pickaxes: {Pickaxes}, Wood: {Wood}, Ore: {Ore})");
 
     public override IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

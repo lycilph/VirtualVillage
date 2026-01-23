@@ -31,5 +31,7 @@ public class Mine : Entity
         state[GetStateKey("ore")] = OreRemaining;
     }
 
+    public override void Render() => Console.WriteLine($"Mine (remaining ore: {OreRemaining})");
+
     public override IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

@@ -34,6 +34,13 @@ public class World
          .. movementProvider.GetProvidedActions(), 
          .. defaultActionsProvider.GetProvidedActions()];
 
+    public void Render()
+    {
+        Console.WriteLine($"World:");
+        foreach (var entity in Entities)
+            entity.Render();
+    }
+
     public override string ToString()
     {
         var sb = new StringBuilder();

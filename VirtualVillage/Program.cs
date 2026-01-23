@@ -8,9 +8,12 @@ class Program
     // TODO: Add plan execution
     
     // TODO: Add statekeys to agent states
+    // * Add proper inventory management
 
     // TODO: Make a class with resources and tool
     // * Generate pickup and deposit actions in the storehouse automatically
+
+    // TODO: Make actions sub-classes...
 
     static void Main()
     {
@@ -36,30 +39,37 @@ class Program
         storehouse.Pickaxes = 0;
 
         var tracer = new MinimalConsolePlannerTracer();
-        foreach (var agent in world.Agents)
-        {
-            Console.WriteLine(agent.Name);
-            var state = world.GetWorldState(agent);
-            var actions = world.GetActions().Where(agent.Job.AllowsAction).ToList();
-            var goal = agent.Job.GetGoals(world, agent).First();
-            var plan = Planner.Plan(state, actions, goal, tracer);
-        }
-
-        Console.Write("Press any key to continue...");
-        Console.ReadKey();
-
-        //int iteration = 0;
-        //while (true)
+        //foreach (var agent in world.Agents)
         //{
-        //    Console.WriteLine($"\n=== Simulation Tick {iteration} ===");
-        //    iteration++;
-
-        //    Console.WriteLine();
-        //    Console.Write("Step simulation [any key] or Quit [q]");
-        //    var keyInfo = Console.ReadKey();
-
-        //    if (keyInfo.Key == ConsoleKey.Q)
-        //        break;
+        //    Console.WriteLine(agent.Name);
+        //    var state = world.GetWorldState(agent);
+        //    var actions = world.GetActions().Where(agent.Job.AllowsAction).ToList();
+        //    var goal = agent.Job.GetGoals(world, agent).First();
+        //    var plan = Planner.Plan(state, actions, goal, tracer);
         //}
+
+        var state = world.GetWorldState(lumberjack);
+        var actions = world.GetActions().Where(lumberjack.Job.AllowsAction).ToList();
+        var goal = lumberjack.Job.GetGoals(world, lumberjack).First();
+        var plan = Planner.Plan(state, actions, goal, tracer);
+
+        lumberjack.AssignPlan(plan!);
+
+        int iteration = 0;
+        while (true)
+        {
+            Console.WriteLine($"\n=== Simulation Tick {iteration} ===");
+            iteration++;
+            
+            lumberjack.Tick(world);
+            world.Render();
+
+            Console.WriteLine();
+            Console.Write("Step simulation [any key] or Quit [q]");
+            var keyInfo = Console.ReadKey();
+
+            if (keyInfo.Key == ConsoleKey.Q)
+                break;
+        }
     }
 }

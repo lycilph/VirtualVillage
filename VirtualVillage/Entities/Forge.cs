@@ -24,6 +24,8 @@ public class Forge : Entity
     }
 
     public override void Update(WorldState state) { }
+    
+    public override void Render() => Console.WriteLine($"Forge");
 
     public override IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

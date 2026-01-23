@@ -8,5 +8,7 @@ public abstract class Entity(string name, Location location) : IdentifiableBase(
 
     public abstract void Update(WorldState state);
 
+    public abstract void Render();
+
     public override string ToString() => $"{Name}[{Id}] {Location}";
 }
