@@ -26,4 +26,11 @@ public class MoveToAction : GoapAction
 
         state.Set(Agent.GetGenericStateKey(Keys.Location), Entity.Location);
     }
+
+    public override void Execute(World world, Agent agent)
+    {
+        if (Entity == null) return;
+
+        agent.Location = Entity.Location;
+    }
 }

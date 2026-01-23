@@ -9,16 +9,15 @@ namespace VirtualVillage;
 
 class Program
 {
-    // TODO: Make actions sub-classes...
-    // * Craftaxe + forge
+    // TODO: Add proper inventory management
+    // * for agents and the store house
+    // * Make an inventory class (for agents and the storehouse)
+    //   * Should have properties for easy access to resources and tools
 
     // TODO: Add plan execution
     // * Implement CanExecute, Execute, IsComplete for all actions
     // * Add tracer (see planner tracer implementation)
 
-    // TODO: Add proper inventory management
-    // * for agents and the store house
-    // * Generate pickup and deposit actions in the storehouse automatically
 
     // TODO: Name generator
 
@@ -42,8 +41,10 @@ class Program
         world.Entities.Add(forge);
         Console.WriteLine(world);
 
-        storehouse.Axes = 0;
+        storehouse.Axes = 1;
         storehouse.Pickaxes = 0;
+
+        miner.Inventory.Add(Keys.Pickaxe, 1);
 
         var tracer = new MinimalConsolePlannerTracer();
         foreach (var agent in world.Agents)
@@ -53,6 +54,8 @@ class Program
             var actions = world.GetActions().Where(agent.Job.AllowsAction).ToList();
             var goal = agent.Job.GetGoals(world, agent).First();
             var plan = Planner.Plan(state, actions, goal, tracer);
+            if (plan != null)
+                agent.AssignPlan(plan);
         }
 
         //var state = world.GetWorldState(lumberjack);
@@ -67,9 +70,10 @@ class Program
         {
             Console.WriteLine($"\n=== Simulation Tick {iteration} ===");
             iteration++;
-            
-            //lumberjack.Tick(world);
-            //world.Render();
+
+            foreach (var agent in world.Agents)
+                agent.Tick(world);
+            world.Render();
 
             Console.WriteLine();
             Console.Write("Step simulation [any key] or Quit [q]");

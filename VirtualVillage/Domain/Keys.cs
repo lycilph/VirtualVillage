@@ -18,4 +18,7 @@ public static class Keys
     public const string Miner = "miner";
     public const string Blacksmith = "blacksmith";
     public const string AllJobs = "all";
+
+    // Items (ie. resources and tools)
+    public static List<string> Items = [Wood, Ore, Axe, Pickaxe];
 }

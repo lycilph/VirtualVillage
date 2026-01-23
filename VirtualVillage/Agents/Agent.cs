@@ -8,6 +8,7 @@ namespace VirtualVillage.Agents;
 
 public class Agent(string name, Job job, Location location) : WorldObject<Agent>(name, location)
 {
+    public Dictionary<string, int> Inventory { get; } = [];
     public Job Job { get; } = job;
 
     public Queue<GoapAction> CurrentPlan { get; private set; } = new();
@@ -16,11 +17,13 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
     public override void Update(WorldState state)
     {
         state[GetGenericStateKey(Keys.Location)] = Location;
+        foreach (var kvp in Inventory)
+            state[GetGenericStateKey(kvp.Key)] = kvp.Value;
     }
 
     public override void Render()
     {
-        Console.WriteLine("Agent ...");
+        Console.WriteLine($"Agent {Name} {State}");
     }
 
     public void AssignPlan(IEnumerable<GoapAction> plan)

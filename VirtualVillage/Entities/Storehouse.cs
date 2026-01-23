@@ -11,22 +11,17 @@ public class Storehouse : WorldObject<Storehouse>, IEntity
     public int Pickaxes { get; set;  }
     public int Wood { get; set; }
     public int Ore { get; set; }
+    public Dictionary<string, int> Inventory { get; } = [];
 
     private readonly List<GoapAction> actions = [];
 
     public Storehouse(Location location) : base("Storehouse", location)
     {
-        actions.Add(new DepositAction(Keys.Wood, 1, this));
-        actions.Add(new DepositAction(Keys.Ore, 1, this));
-
-        actions.Add(new DepositAction(Keys.Axe, 1, this));
-        actions.Add(new DepositAction(Keys.Pickaxe, 1, this));
-
-        actions.Add(new PickupAction(Keys.Wood, 1, this));
-        actions.Add(new PickupAction(Keys.Ore, 1, this));
-
-        actions.Add(new PickupAction(Keys.Axe, 1, this));
-        actions.Add(new PickupAction(Keys.Pickaxe, 1, this));
+        foreach (var item in Keys.Items)
+        {
+            actions.Add(new DepositAction(item, 1, this));
+            actions.Add(new PickupAction(item, 1, this));
+        }
     }
 
     public override void Update(WorldState state) 
