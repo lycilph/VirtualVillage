@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace VirtualVillage;
+namespace VirtualVillage.Planning;
 
 public class WorldState : Dictionary<string, object>
 {
@@ -24,6 +24,8 @@ public class WorldState : Dictionary<string, object>
             return typedValue;
         return default;
     }
+
+    public bool Has(string key) => Get<int>(key) > 0;
 
     public override int GetHashCode()
     {

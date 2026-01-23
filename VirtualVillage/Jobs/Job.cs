@@ -1,4 +1,9 @@
-﻿namespace VirtualVillage.Jobs;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Agents;
+using VirtualVillage.Domain;
+using VirtualVillage.Goals;
+
+namespace VirtualVillage.Jobs;
 
 public abstract class Job(string name)
 {

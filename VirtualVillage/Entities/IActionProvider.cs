@@ -1,4 +1,6 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Actions;
+
+namespace VirtualVillage.Entities;
 
 public interface IActionProvider
 {

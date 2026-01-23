@@ -1,14 +1,17 @@
 ﻿using System.Text;
+using VirtualVillage.Actions;
+using VirtualVillage.Agents;
 using VirtualVillage.Entities;
+using VirtualVillage.Planning;
 
-namespace VirtualVillage;
+namespace VirtualVillage.Domain;
 
 public class World
 {
     private readonly MovementProvider movementProvider;
     private readonly DefaultActionsProvider defaultActionsProvider;
 
-    public List<Entity> Entities { get; } = [];
+    public List<IEntity> Entities { get; } = [];
     public List<Agent> Agents { get; } = [];
 
     public World()
@@ -37,6 +40,8 @@ public class World
     public void Render()
     {
         Console.WriteLine($"World:");
+        foreach (var agent in Agents)
+            agent.Render();
         foreach (var entity in Entities)
             entity.Render();
     }

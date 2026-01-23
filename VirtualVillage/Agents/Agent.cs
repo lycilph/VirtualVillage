@@ -1,20 +1,26 @@
-﻿using VirtualVillage.Jobs;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Core;
+using VirtualVillage.Domain;
+using VirtualVillage.Jobs;
+using VirtualVillage.Planning;
 
-namespace VirtualVillage;
+namespace VirtualVillage.Agents;
 
-public class Agent(string name, Job job, Location location)
+public class Agent(string name, Job job, Location location) : WorldObject<Agent>(name, location)
 {
-    public int Id { get; } = IdGenerator.Next();
-    public string Name { get; } = name;
-    public Location Location { get; } = location;
     public Job Job { get; } = job;
 
     public Queue<GoapAction> CurrentPlan { get; private set; } = new();
     public ExecutionState State { get; private set; } = ExecutionState.Idle;
 
-    public void Update(WorldState state)
+    public override void Update(WorldState state)
     {
-        state["agent_location"] = Location;
+        state[GetGenericStateKey(Keys.Location)] = Location;
+    }
+
+    public override void Render()
+    {
+        Console.WriteLine("Agent ...");
     }
 
     public void AssignPlan(IEnumerable<GoapAction> plan)
@@ -51,6 +57,4 @@ public class Agent(string name, Job job, Location location)
             CurrentPlan.Dequeue();
         }
     }
-
-    public override string ToString() => $"{Name}[{Id}] {Location}";
 }

@@ -1,37 +1,29 @@
-﻿namespace VirtualVillage.Entities;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Core;
+using VirtualVillage.Domain;
+using VirtualVillage.Planning;
 
-public class Forest : Entity
+namespace VirtualVillage.Entities;
+
+public class Forest : WorldObject<Forest>, IEntity
 {
-    public int WoodRemaining { get; }
+    public int Wood { get; }
 
     private readonly List<GoapAction> actions = [];
 
     public Forest(Location location, int woodRemaining) : base("Forest", location)
     {
-        WoodRemaining = woodRemaining;
+        Wood = woodRemaining;
 
-        actions.Add(
-            new GoapAction.Builder("Chop Wood", 5)
-            .WithPrecondition(s => 
-                s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
-                s.Get<int>("agent_axe") > 0 &&
-                s.Get<int>(GetStateKey("wood")) > 0)
-            .WithEffect(s => 
-                {
-                    s.Inc("agent_wood", 1);
-                    s.Dec(GetStateKey("wood"), 1);
-                })
-            .WithEntity(this)
-            .WithTag("Lumberjack")
-            .Build());
+        actions.Add(new ChopWoodAction(this, 5));
     }
 
     public override void Update(WorldState state)
     {
-        state[GetStateKey("wood")] = WoodRemaining;
+        state[GetStateKey(Keys.Wood)] = Wood;
     }
 
-    public override void Render() => Console.WriteLine($"Forest (remaining wood: {WoodRemaining})");
+    public override void Render() => Console.WriteLine($"Forest (remaining wood: {Wood})");
 
-    public override IEnumerable<GoapAction> GetProvidedActions() => actions;
+    public IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

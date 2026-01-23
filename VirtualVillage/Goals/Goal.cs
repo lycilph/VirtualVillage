@@ -1,4 +1,7 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Core;
+using VirtualVillage.Planning;
+
+namespace VirtualVillage.Goals;
 
 public class Goal(string name) : IdentifiableBase(name)
 {

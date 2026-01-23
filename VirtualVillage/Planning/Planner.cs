@@ -1,4 +1,8 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Core;
+using VirtualVillage.Goals;
+
+namespace VirtualVillage.Planning;
 
 public class Planner
 {

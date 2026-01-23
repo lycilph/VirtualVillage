@@ -1,6 +1,8 @@
 ﻿using VirtualVillage.Entities;
+using VirtualVillage.Agents;
+using VirtualVillage.Domain;
 
-namespace VirtualVillage;
+namespace VirtualVillage.Goals;
 
 public static class GoalFactory
 {

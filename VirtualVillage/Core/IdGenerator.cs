@@ -1,4 +1,4 @@
-﻿namespace VirtualVillage;
+﻿namespace VirtualVillage.Core;
 
 public sealed class IdGenerator
 {

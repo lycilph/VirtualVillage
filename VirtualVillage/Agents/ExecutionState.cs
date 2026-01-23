@@ -1,4 +1,4 @@
-﻿namespace VirtualVillage;
+﻿namespace VirtualVillage.Agents;
 
 public enum ExecutionState
 {

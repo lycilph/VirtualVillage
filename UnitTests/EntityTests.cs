@@ -1,4 +1,4 @@
-﻿using VirtualVillage;
+﻿using VirtualVillage.Core;
 using VirtualVillage.Entities;
 
 namespace UnitTests;
@@ -9,12 +9,12 @@ public class EntityTests
     public void Test1()
     {
         // Arrange
-        var entity = new Forest(new Location(1, 1), 5) as Entity;
+        var entity = new Forest(new Location(1, 1), 5) as IEntity;
 
         // Act
         var key = entity.GetStateKey("wood");
 
         // Assert
-        Assert.Equal("Forest_1_wood", key);
+        Assert.Equal("Forest[1]_wood", key);
     }
 }

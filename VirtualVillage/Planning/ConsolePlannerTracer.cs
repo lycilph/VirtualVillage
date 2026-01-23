@@ -1,4 +1,7 @@
-﻿namespace VirtualVillage;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Goals;
+
+namespace VirtualVillage.Planning;
 
 public sealed class ConsolePlannerTracer : IPlannerTracer
 {

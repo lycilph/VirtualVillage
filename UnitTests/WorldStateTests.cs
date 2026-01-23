@@ -1,4 +1,5 @@
-﻿using VirtualVillage;
+﻿using VirtualVillage.Core;
+using VirtualVillage.Planning;
 
 namespace UnitTests;
 

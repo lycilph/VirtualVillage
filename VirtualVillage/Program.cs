@@ -1,19 +1,26 @@
-﻿using VirtualVillage.Entities;
+﻿using VirtualVillage.Agents;
+using VirtualVillage.Core;
+using VirtualVillage.Domain;
+using VirtualVillage.Entities;
 using VirtualVillage.Jobs;
+using VirtualVillage.Planning;
 
 namespace VirtualVillage;
 
 class Program
 {
-    // TODO: Add plan execution
-    
-    // TODO: Add statekeys to agent states
-    // * Add proper inventory management
+    // TODO: Make actions sub-classes...
+    // * Craftaxe + forge
 
-    // TODO: Make a class with resources and tool
+    // TODO: Add plan execution
+    // * Implement CanExecute, Execute, IsComplete for all actions
+    // * Add tracer (see planner tracer implementation)
+
+    // TODO: Add proper inventory management
+    // * for agents and the store house
     // * Generate pickup and deposit actions in the storehouse automatically
 
-    // TODO: Make actions sub-classes...
+    // TODO: Name generator
 
     static void Main()
     {
@@ -39,21 +46,21 @@ class Program
         storehouse.Pickaxes = 0;
 
         var tracer = new MinimalConsolePlannerTracer();
-        //foreach (var agent in world.Agents)
-        //{
-        //    Console.WriteLine(agent.Name);
-        //    var state = world.GetWorldState(agent);
-        //    var actions = world.GetActions().Where(agent.Job.AllowsAction).ToList();
-        //    var goal = agent.Job.GetGoals(world, agent).First();
-        //    var plan = Planner.Plan(state, actions, goal, tracer);
-        //}
+        foreach (var agent in world.Agents)
+        {
+            Console.WriteLine(agent.Name);
+            var state = world.GetWorldState(agent);
+            var actions = world.GetActions().Where(agent.Job.AllowsAction).ToList();
+            var goal = agent.Job.GetGoals(world, agent).First();
+            var plan = Planner.Plan(state, actions, goal, tracer);
+        }
 
-        var state = world.GetWorldState(lumberjack);
-        var actions = world.GetActions().Where(lumberjack.Job.AllowsAction).ToList();
-        var goal = lumberjack.Job.GetGoals(world, lumberjack).First();
-        var plan = Planner.Plan(state, actions, goal, tracer);
+        //var state = world.GetWorldState(lumberjack);
+        //var actions = world.GetActions().Where(lumberjack.Job.AllowsAction).ToList();
+        //var goal = lumberjack.Job.GetGoals(world, lumberjack).First();
+        //var plan = Planner.Plan(state, actions, goal, tracer);
 
-        lumberjack.AssignPlan(plan!);
+        //lumberjack.AssignPlan(plan!);
 
         int iteration = 0;
         while (true)
@@ -61,8 +68,8 @@ class Program
             Console.WriteLine($"\n=== Simulation Tick {iteration} ===");
             iteration++;
             
-            lumberjack.Tick(world);
-            world.Render();
+            //lumberjack.Tick(world);
+            //world.Render();
 
             Console.WriteLine();
             Console.Write("Step simulation [any key] or Quit [q]");

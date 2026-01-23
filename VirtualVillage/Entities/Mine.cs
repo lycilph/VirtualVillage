@@ -1,37 +1,29 @@
-﻿namespace VirtualVillage.Entities;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Core;
+using VirtualVillage.Domain;
+using VirtualVillage.Planning;
 
-public class Mine : Entity
+namespace VirtualVillage.Entities;
+
+public class Mine : WorldObject<Mine>, IEntity
 {
-    public int OreRemaining { get; }
+    public int Ore { get; }
 
     private readonly List<GoapAction> actions = [];
 
     public Mine(Location location, int oreRemaining) : base("Mine", location)
     {
-        OreRemaining = oreRemaining;
+        Ore = oreRemaining;
 
-        actions.Add(
-            new GoapAction.Builder("Mine ore", 5)
-            .WithPrecondition(s =>
-                s.Get<Location>("agent_location").DistanceTo(Location) == 0 &&
-                s.Get<int>("agent_pickaxe") > 0 &&
-                s.Get<int>(GetStateKey("ore")) > 0)
-            .WithEffect(s =>
-                {
-                    s.Inc("agent_ore", 1);
-                    s.Dec(GetStateKey("ore"), 1);
-                })
-            .WithEntity(this)
-            .WithTag("Miner")
-            .Build());
+        actions.Add(new MineOreAction(this, 5));
     }
 
     public override void Update(WorldState state)
     {
-        state[GetStateKey("ore")] = OreRemaining;
+        state[GetStateKey(Keys.Ore)] = Ore;
     }
 
-    public override void Render() => Console.WriteLine($"Mine (remaining ore: {OreRemaining})");
+    public override void Render() => Console.WriteLine($"Mine (remaining ore: {Ore})");
 
-    public override IEnumerable<GoapAction> GetProvidedActions() => actions;
+    public IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

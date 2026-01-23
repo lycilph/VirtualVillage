@@ -1,4 +1,4 @@
-﻿namespace VirtualVillage;
+﻿namespace VirtualVillage.Core;
 
 public readonly record struct Location(int X, int Y)
 {

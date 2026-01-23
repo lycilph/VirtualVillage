@@ -1,4 +1,9 @@
-﻿namespace VirtualVillage.Jobs;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Agents;
+using VirtualVillage.Domain;
+using VirtualVillage.Goals;
+
+namespace VirtualVillage.Jobs;
 
 public sealed class MinerJob : Job
 {
@@ -11,7 +16,7 @@ public sealed class MinerJob : Job
 
     public override bool AllowsAction(GoapAction action)
     {
-        return action.Tags.Contains("All") ||
-               action.Tags.Contains("Miner");
+        return action.Tags.Contains(Keys.AllJobs) ||
+               action.Tags.Contains(Keys.Miner);
     }
 }

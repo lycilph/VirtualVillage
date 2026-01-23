@@ -1,5 +1,7 @@
-﻿
-namespace VirtualVillage;
+﻿using VirtualVillage.Actions;
+using VirtualVillage.Goals;
+
+namespace VirtualVillage.Planning;
 
 public class MinimalConsolePlannerTracer : IPlannerTracer
 {
