@@ -120,7 +120,7 @@ public class Planner
         return agent_location.DistanceTo(action_location);
     }
 
-    private static List<GoapAction> ReconstructPlan(Node node)
+    private static List<GoapAction> ReconstructPlan(Node node, IPlannerTracer? tracer = null)
     {
         var plan = new List<GoapAction>();
 
@@ -131,7 +131,7 @@ public class Planner
             current = current.Parent!;
         }
 
-        Console.WriteLine($"Found plan (total cost {node.F}, {plan.Count} steps)");
+        tracer?.PlanReconstructed(plan, node.F);
 
         plan.Reverse();
         return plan;

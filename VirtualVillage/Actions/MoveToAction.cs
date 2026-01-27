@@ -31,6 +31,8 @@ public class MoveToAction : GoapAction
     {
         if (Entity == null) return;
 
-        agent.Location = Entity.Location;
+        agent.Location = agent.Location.StepTowards(Entity.Location);
     }
+
+    public override bool IsComplete(World world, Agent agent) => Entity?.Location.DistanceTo(agent.Location) == 0;
 }

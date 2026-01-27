@@ -31,4 +31,18 @@ public class MineOreAction : GoapAction
         state.Inc(Agent.GetGenericStateKey(Keys.Ore), 1);
         state.Dec(mine.GetStateKey(Keys.Ore), 1);
     }
+
+    public override bool CanExecute(World world, Agent agent) => Entity is Mine mine && mine.Ore >= 0;
+
+    public override void Execute(World world, Agent agent)
+    {
+        if (Entity is not Mine mine) return;
+
+        mine.Ore -= 1;
+
+        if (agent.Inventory.TryGetValue(Keys.Ore, out var ore))
+            agent.Inventory[Keys.Ore] = ore + 1;
+        else
+            agent.Inventory[Keys.Ore] = 1;
+    }
 }

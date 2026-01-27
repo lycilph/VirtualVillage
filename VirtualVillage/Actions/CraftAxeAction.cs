@@ -29,4 +29,23 @@ public class CraftAxeAction : GoapAction
         state.Dec(Agent.GetGenericStateKey(Keys.Wood), 1);
         state.Dec(Agent.GetGenericStateKey(Keys.Ore), 1);
     }
+
+    public override bool CanExecute(World world, Agent agent) => 
+        Entity is Forge &&
+        agent.Inventory.TryGetValue(Keys.Wood, out int wood) && wood > 0 &&
+        agent.Inventory.TryGetValue(Keys.Ore, out int ore) && ore > 0;
+
+    public override void Execute(World world, Agent agent)
+    {
+        if (agent.Inventory.TryGetValue(Keys.Wood, out var wood))
+            agent.Inventory[Keys.Wood] = wood - 1;
+
+        if (agent.Inventory.TryGetValue(Keys.Ore, out var ore))
+            agent.Inventory[Keys.Ore] = ore - 1;
+
+        if (agent.Inventory.TryGetValue(Keys.Axe, out var axe))
+            agent.Inventory[Keys.Axe] = axe + 1;
+        else
+            agent.Inventory[Keys.Axe] = 1;
+    }
 }

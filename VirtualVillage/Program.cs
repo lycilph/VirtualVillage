@@ -3,21 +3,21 @@ using VirtualVillage.Core;
 using VirtualVillage.Domain;
 using VirtualVillage.Entities;
 using VirtualVillage.Jobs;
-using VirtualVillage.Planning;
 
 namespace VirtualVillage;
 
 class Program
 {
-    // TODO: Add proper inventory management
-    // * for agents and the store house
-    // * Make an inventory class (for agents and the storehouse)
-    //   * Should have properties for easy access to resources and tools
+    // Make the scavenge action go to a random location
+    // * It should only find 1 resource
+
+    // Make goal heirarchies
+    // * Job work is heighest (ie. lumberjack -> chop wood, etc.)
+    // * Scavenge is (almost) last
+    // * Make a relax goal
 
     // TODO: Add plan execution
-    // * Implement CanExecute, Execute, IsComplete for all actions
     // * Add tracer (see planner tracer implementation)
-
 
     // TODO: Name generator
 
@@ -40,30 +40,6 @@ class Program
         world.Entities.Add(storehouse);
         world.Entities.Add(forge);
         Console.WriteLine(world);
-
-        storehouse.Axes = 1;
-        storehouse.Pickaxes = 0;
-
-        miner.Inventory.Add(Keys.Pickaxe, 1);
-
-        var tracer = new MinimalConsolePlannerTracer();
-        foreach (var agent in world.Agents)
-        {
-            Console.WriteLine(agent.Name);
-            var state = world.GetWorldState(agent);
-            var actions = world.GetActions().Where(agent.Job.AllowsAction).ToList();
-            var goal = agent.Job.GetGoals(world, agent).First();
-            var plan = Planner.Plan(state, actions, goal, tracer);
-            if (plan != null)
-                agent.AssignPlan(plan);
-        }
-
-        //var state = world.GetWorldState(lumberjack);
-        //var actions = world.GetActions().Where(lumberjack.Job.AllowsAction).ToList();
-        //var goal = lumberjack.Job.GetGoals(world, lumberjack).First();
-        //var plan = Planner.Plan(state, actions, goal, tracer);
-
-        //lumberjack.AssignPlan(plan!);
 
         int iteration = 0;
         while (true)

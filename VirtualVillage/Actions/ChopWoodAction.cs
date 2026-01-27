@@ -31,4 +31,18 @@ public class ChopWoodAction : GoapAction
         state.Inc(Agent.GetGenericStateKey(Keys.Wood), 1);
         state.Dec(forest.GetStateKey(Keys.Wood), 1);
     }
+
+    public override bool CanExecute(World world, Agent agent) => Entity is Forest forest && forest.Wood >= 0;
+    
+    public override void Execute(World world, Agent agent) 
+    {
+        if (Entity is not Forest forest) return;
+
+        forest.Wood -= 1;
+
+        if (agent.Inventory.TryGetValue(Keys.Wood, out var wood))
+            agent.Inventory[Keys.Wood] = wood + 1;
+        else
+            agent.Inventory[Keys.Wood] = 1;
+    }
 }

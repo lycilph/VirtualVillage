@@ -17,23 +17,41 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
     public override void Update(WorldState state)
     {
         state[GetGenericStateKey(Keys.Location)] = Location;
+
         foreach (var kvp in Inventory)
-            state[GetGenericStateKey(kvp.Key)] = kvp.Value;
+        {
+            if (kvp.Value > 0)
+                state[GetGenericStateKey(kvp.Key)] = kvp.Value;
+        }
     }
 
     public override void Render()
     {
-        Console.WriteLine($"Agent {Name} {State}");
+        var resources = string.Join(", ", Inventory.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
+        Console.WriteLine($"Agent {Name} {State} ({resources})");
     }
 
-    public void AssignPlan(IEnumerable<GoapAction> plan)
+    public void Replan(World world)
     {
-        CurrentPlan = new Queue<GoapAction>(plan);
-        State = ExecutionState.Executing;
+        var tracer = new MinimalConsolePlannerTracer();
+
+        var state = world.GetWorldState(this);
+        var actions = world.GetActions().Where(Job.AllowsAction).ToList();
+        var goal = Job.GetGoals(world, this).First();
+        var plan = Planner.Plan(state, actions, goal);//, tracer);
+
+        if (plan != null)
+        {
+            CurrentPlan = new Queue<GoapAction>(plan);
+            State = ExecutionState.Executing;
+        }
     }
 
     public void Tick(World world)
     {
+        if (State != ExecutionState.Executing)
+            Replan(world);
+
         if (State != ExecutionState.Executing)
             return;
 

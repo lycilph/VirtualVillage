@@ -7,10 +7,6 @@ namespace VirtualVillage.Entities;
 
 public class Storehouse : WorldObject<Storehouse>, IEntity
 {
-    public int Axes { get; set;  }
-    public int Pickaxes { get; set;  }
-    public int Wood { get; set; }
-    public int Ore { get; set; }
     public Dictionary<string, int> Inventory { get; } = [];
 
     private readonly List<GoapAction> actions = [];
@@ -26,13 +22,18 @@ public class Storehouse : WorldObject<Storehouse>, IEntity
 
     public override void Update(WorldState state) 
     {
-        state[GetStateKey(Keys.Axe)] = Axes;
-        state[GetStateKey(Keys.Pickaxe)] = Pickaxes;
-        state[GetStateKey(Keys.Wood)] = Wood;
-        state[GetStateKey(Keys.Ore)] = Ore;
+        foreach (var kvp in Inventory)
+        {
+            if (kvp.Value > 0)
+                state[GetStateKey(kvp.Key)] = kvp.Value;
+        }
     }
 
-    public override void Render() => Console.WriteLine($"Storehouse (Axes: {Axes}, Pickaxes: {Pickaxes}, Wood: {Wood}, Ore: {Ore})");
+    public override void Render()
+    {
+        var resources = string.Join(", ", Inventory.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
+        Console.WriteLine($"Storehouse ({resources})");
+    }
 
     public IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

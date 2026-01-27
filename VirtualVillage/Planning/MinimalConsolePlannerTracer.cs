@@ -42,4 +42,6 @@ public class MinimalConsolePlannerTracer : IPlannerTracer
         Console.WriteLine($"Goal : {goal.Name}");
         Console.WriteLine();
     }
+
+    public void PlanReconstructed(List<GoapAction> plan, float cost) {}
 }

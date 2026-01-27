@@ -1,4 +1,5 @@
-﻿using VirtualVillage.Actions;
+﻿using System.Xml.Linq;
+using VirtualVillage.Actions;
 using VirtualVillage.Goals;
 
 namespace VirtualVillage.Planning;
@@ -61,5 +62,10 @@ public sealed class ConsolePlannerTracer : IPlannerTracer
 
         for (int i = 0; i < plan.Count; i++)
             Console.WriteLine($"{i + 1}. {plan[i].Name}");
+    }
+
+    public void PlanReconstructed(List<GoapAction> plan, float cost)
+    {
+        Console.WriteLine($"Found plan (total cost {cost}, {plan.Count} steps)");
     }
 }

@@ -7,7 +7,7 @@ namespace VirtualVillage.Entities;
 
 public class Mine : WorldObject<Mine>, IEntity
 {
-    public int Ore { get; }
+    public int Ore { get; set; }
 
     private readonly List<GoapAction> actions = [];
 

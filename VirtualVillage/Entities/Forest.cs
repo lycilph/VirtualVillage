@@ -7,7 +7,7 @@ namespace VirtualVillage.Entities;
 
 public class Forest : WorldObject<Forest>, IEntity
 {
-    public int Wood { get; }
+    public int Wood { get; set;  }
 
     private readonly List<GoapAction> actions = [];
 

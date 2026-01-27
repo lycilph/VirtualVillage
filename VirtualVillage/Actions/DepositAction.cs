@@ -33,4 +33,21 @@ public class DepositAction : GoapAction
         state.Inc(storehouse.GetStateKey(value), 1);
         state.Dec(Agent.GetGenericStateKey(value), 1);
     }
+
+    public override bool CanExecute(World world, Agent agent) => agent.Inventory.TryGetValue(value, out int resource) && resource > 0;
+
+    public override void Execute(World world, Agent agent)
+    {
+        if (Entity is not Storehouse storehouse) return;
+        
+        var resource = 0;
+
+        if (storehouse.Inventory.TryGetValue(value, out resource))
+            storehouse.Inventory[value] = resource + 1;
+        else
+            storehouse.Inventory[value] = 1;
+
+        if (agent.Inventory.TryGetValue(value, out resource))
+            agent.Inventory[value] = resource - 1;
+    }
 }

@@ -12,4 +12,5 @@ public interface IPlannerTracer
     void Enqueue(WorldState state, float g, float f);
     void GoalReached(WorldState state, int nodes_expanded);
     void Finished(List<GoapAction>? plan);
+    void PlanReconstructed(List<GoapAction> plan, float cost);
 }
