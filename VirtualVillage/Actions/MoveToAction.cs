@@ -1,5 +1,4 @@
-﻿using VirtualVillage.Agents;
-using VirtualVillage.Core;
+﻿using VirtualVillage.Core;
 using VirtualVillage.Domain;
 using VirtualVillage.Entities;
 using VirtualVillage.Planning;

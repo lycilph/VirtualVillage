@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using VirtualVillage.Actions;
-using VirtualVillage.Agents;
 using VirtualVillage.Entities;
 using VirtualVillage.Planning;
 
@@ -13,6 +12,7 @@ public class World
 
     public List<IEntity> Entities { get; } = [];
     public List<Agent> Agents { get; } = [];
+    public List<string> Events { get; } = [];
 
     public World()
     {
@@ -37,42 +37,59 @@ public class World
          .. movementProvider.GetProvidedActions(), 
          .. defaultActionsProvider.GetProvidedActions()];
 
+    public void Tick()
+    {
+        Events.Clear();
+
+        foreach (var agent in Agents)
+            agent.Tick(this);
+
+        //foreach (var entity in Entities)
+        //    entity.Tick();
+    }
+
     public void Render()
     {
-        Console.WriteLine($"World:");
+        Console.WriteLine("--- Agents ---");
         foreach (var agent in Agents)
             agent.Render();
+
+        Console.WriteLine("--- Entities ---");
         foreach (var entity in Entities)
             entity.Render();
+
+        Console.WriteLine("--- Events ---");
+        foreach (var e in Events)
+            Console.WriteLine(e);
     }
 
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
+    //public override string ToString()
+    //{
+    //    var sb = new StringBuilder();
 
-        sb.AppendLine("Agents");
-        foreach (var agent in Agents)
-            sb.AppendLine(" * " + agent.ToString());
+    //    sb.AppendLine("Agents");
+    //    foreach (var agent in Agents)
+    //        sb.AppendLine(" * " + agent.ToString());
 
-        sb.AppendLine("Entities");
-        foreach (var entity in Entities)
-        {
-            sb.AppendLine(" * " + entity.ToString());
-            var actions = entity.GetProvidedActions();
-            foreach (var action in actions)
-            {
-                sb.AppendLine(" * * " + action);
-            }
-        }
+    //    sb.AppendLine("Entities");
+    //    foreach (var entity in Entities)
+    //    {
+    //        sb.AppendLine(" * " + entity.ToString());
+    //        var actions = entity.GetProvidedActions();
+    //        foreach (var action in actions)
+    //        {
+    //            sb.AppendLine(" * * " + action);
+    //        }
+    //    }
 
-        sb.AppendLine("Movement actions:");
-        foreach (var action in movementProvider.GetProvidedActions())
-            sb.AppendLine(" * " + action);
+    //    sb.AppendLine("Movement actions:");
+    //    foreach (var action in movementProvider.GetProvidedActions())
+    //        sb.AppendLine(" * " + action);
 
-        sb.AppendLine("Default actions:");
-        foreach (var action in defaultActionsProvider.GetProvidedActions())
-            sb.AppendLine(" * " + action);
+    //    sb.AppendLine("Default actions:");
+    //    foreach (var action in defaultActionsProvider.GetProvidedActions())
+    //        sb.AppendLine(" * " + action);
 
-        return sb.ToString();
-    }
+    //    return sb.ToString();
+    //}
 }

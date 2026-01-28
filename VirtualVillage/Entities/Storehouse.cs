@@ -32,7 +32,7 @@ public class Storehouse : WorldObject<Storehouse>, IEntity
     public override void Render()
     {
         var resources = string.Join(", ", Inventory.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
-        Console.WriteLine($"Storehouse ({resources})");
+        Console.WriteLine($"Storehouse @ {Location} ({resources})");
     }
 
     public IEnumerable<GoapAction> GetProvidedActions() => actions;

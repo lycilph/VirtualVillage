@@ -1,5 +1,4 @@
 ﻿using VirtualVillage.Entities;
-using VirtualVillage.Agents;
 using VirtualVillage.Domain;
 
 namespace VirtualVillage.Goals;

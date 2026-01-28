@@ -23,7 +23,7 @@ public class Forest : WorldObject<Forest>, IEntity
         state[GetStateKey(Keys.Wood)] = Wood;
     }
 
-    public override void Render() => Console.WriteLine($"Forest (remaining wood: {Wood})");
+    public override void Render() => Console.WriteLine($"Forest @ {Location} (remaining wood: {Wood})");
 
     public IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

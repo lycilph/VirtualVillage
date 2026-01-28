@@ -1,5 +1,4 @@
 ﻿using VirtualVillage.Actions;
-using VirtualVillage.Agents;
 using VirtualVillage.Domain;
 using VirtualVillage.Goals;
 

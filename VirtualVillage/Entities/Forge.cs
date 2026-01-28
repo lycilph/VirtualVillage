@@ -15,7 +15,7 @@ public class Forge : WorldObject<Forge>, IEntity
 
     public override void Update(WorldState state) { }
     
-    public override void Render() => Console.WriteLine($"Forge");
+    public override void Render() => Console.WriteLine($"Forge @ {Location}");
 
     public IEnumerable<GoapAction> GetProvidedActions() => actions;
 }

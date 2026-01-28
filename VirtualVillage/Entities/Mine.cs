@@ -23,7 +23,7 @@ public class Mine : WorldObject<Mine>, IEntity
         state[GetStateKey(Keys.Ore)] = Ore;
     }
 
-    public override void Render() => Console.WriteLine($"Mine (remaining ore: {Ore})");
+    public override void Render() => Console.WriteLine($"Mine @ {Location} (remaining ore: {Ore})");
 
     public IEnumerable<GoapAction> GetProvidedActions() => actions;
 }
