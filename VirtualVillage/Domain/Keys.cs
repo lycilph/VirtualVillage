@@ -4,6 +4,7 @@ public static class Keys
 {
     // Common
     public const string Location = "location";
+    public const string Relax = "relax";
 
     // Resources
     public const string Wood = "wood";

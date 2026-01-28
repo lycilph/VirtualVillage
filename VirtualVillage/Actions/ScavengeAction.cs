@@ -1,6 +1,5 @@
 ﻿using VirtualVillage.Agents;
 using VirtualVillage.Domain;
-using VirtualVillage.Entities;
 using VirtualVillage.Planning;
 
 namespace VirtualVillage.Actions;

@@ -12,6 +12,7 @@ public sealed class MinerJob : Job
     public override IEnumerable<Goal> GetGoals(World world, Agent agent)
     {
         yield return GoalFactory.StoreOre(world, agent);
+        yield return GoalFactory.Relax();
     }
 
     public override bool AllowsAction(GoapAction action)

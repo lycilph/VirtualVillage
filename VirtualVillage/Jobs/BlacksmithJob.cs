@@ -12,6 +12,7 @@ public sealed class BlacksmithJob : Job
     public override IEnumerable<Goal> GetGoals(World world, Agent agent)
     {
         yield return GoalFactory.StoreAxe(world, agent);
+        yield return GoalFactory.Relax();
     }
 
     public override bool AllowsAction(GoapAction action)

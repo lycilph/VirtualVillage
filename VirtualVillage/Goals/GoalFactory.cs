@@ -13,8 +13,12 @@ public static class GoalFactory
             .OrderBy(x => agent.Location.DistanceTo(x.Location))
             .First();
 
+        if (!storehouse.Inventory.TryGetValue(Keys.Wood, out int wood))
+            wood = 0;
+
         return new Goal.Builder("Store Wood")
-            .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey("wood")) > 2)
+            .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey(Keys.Wood)) > wood)
+            .WithPriority(s => wood < 5 ? 100 : 0)
             .Build();
     }
 
@@ -25,8 +29,11 @@ public static class GoalFactory
             .OrderBy(x => agent.Location.DistanceTo(x.Location))
             .First();
 
+        if (!storehouse.Inventory.TryGetValue(Keys.Ore, out int ore))
+            ore = 0;
+
         return new Goal.Builder("Store Ore")
-            .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey("ore")) > 1)
+            .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey(Keys.Ore)) > ore)
             .Build();
     }
 
@@ -36,9 +43,20 @@ public static class GoalFactory
             .OfType<Storehouse>()
             .OrderBy(x => agent.Location.DistanceTo(x.Location))
             .First();
+        
+        if (!storehouse.Inventory.TryGetValue(Keys.Axe, out int axe))
+            axe = 0;
 
         return new Goal.Builder("Store Axe")
-            .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey("axe")) > 0)
+            .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey(Keys.Axe)) > axe)
+            .Build();
+    }
+
+    public static Goal Relax()
+    {
+        return new Goal.Builder("Relax")
+            .WithDesiredState(s => s.Get<bool>(Agent.GetGenericStateKey(Keys.Relax)) == true)
+            .WithPriority(s => 1)
             .Build();
     }
 }

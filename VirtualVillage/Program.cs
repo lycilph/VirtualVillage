@@ -8,19 +8,6 @@ namespace VirtualVillage;
 
 class Program
 {
-    // Make the scavenge action go to a random location
-    // * It should only find 1 resource
-
-    // Make goal heirarchies
-    // * Job work is heighest (ie. lumberjack -> chop wood, etc.)
-    // * Scavenge is (almost) last
-    // * Make a relax goal
-
-    // TODO: Add plan execution
-    // * Add tracer (see planner tracer implementation)
-
-    // TODO: Name generator
-
     static void Main()
     {
         var lumberjack = new Agent("Bjorn Oakhand", new LumberjackJob(), new Location(0, 0));

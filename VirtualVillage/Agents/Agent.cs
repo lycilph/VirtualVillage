@@ -1,4 +1,5 @@
-﻿using VirtualVillage.Actions;
+﻿using System.Diagnostics;
+using VirtualVillage.Actions;
 using VirtualVillage.Core;
 using VirtualVillage.Domain;
 using VirtualVillage.Jobs;
@@ -33,17 +34,25 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
 
     public void Replan(World world)
     {
-        var tracer = new MinimalConsolePlannerTracer();
-
         var state = world.GetWorldState(this);
         var actions = world.GetActions().Where(Job.AllowsAction).ToList();
-        var goal = Job.GetGoals(world, this).First();
-        var plan = Planner.Plan(state, actions, goal);//, tracer);
+        var goals = Job.GetGoals(world, this)
+            .Where(g => g.IsValid(state))
+            .OrderByDescending(g => g.Priority(state))
+            .ToList();
 
-        if (plan != null)
+        var tracer = new MinimalConsolePlannerTracer();
+        foreach (var goal in goals)
         {
-            CurrentPlan = new Queue<GoapAction>(plan);
-            State = ExecutionState.Executing;
+            var plan = Planner.Plan(state, actions, goal, tracer);
+            if (plan != null)
+            {
+                CurrentPlan = new Queue<GoapAction>(plan);
+                State = ExecutionState.Executing;
+                return;
+            }
+            else
+                Console.WriteLine("Could'nt find a plan for goal: " + goal.Name);
         }
     }
 
