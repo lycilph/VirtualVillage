@@ -9,9 +9,9 @@ public class DefaultActionsProvider : IActionProvider
 
     public DefaultActionsProvider()
     {
-        actions.Add(new ScavengeAction(Keys.Wood, Keys.Lumberjack, 50));
-        actions.Add(new ScavengeAction(Keys.Ore, Keys.Miner, 50));
-        actions.Add(new RelaxAction(1));
+        actions.Add(new ScavengeAction(Keys.Wood, Keys.Lumberjack, 50, 10));
+        actions.Add(new ScavengeAction(Keys.Ore, Keys.Miner, 50, 10));
+        actions.Add(new RelaxAction(1, 5));
     }
 
     public IEnumerable<GoapAction> GetProvidedActions() => actions;

@@ -10,7 +10,7 @@ public class DepositAction : GoapAction
 {
     private readonly string value;
 
-    public DepositAction(string value, float cost, IEntity entity) : base($"Deposit[{value}]", cost, entity)
+    public DepositAction(string value, float cost, int duration, IEntity entity) : base($"Deposit[{value}]", cost, duration, entity)
     {
         Tags.Add(Keys.AllJobs);
         this.value = value;
@@ -36,7 +36,7 @@ public class DepositAction : GoapAction
 
     public override bool CanExecute(World world, Agent agent) => agent.Inventory.TryGetValue(value, out int resource) && resource > 0;
 
-    public override void Execute(World world, Agent agent)
+    public override void Execute(World world, Agent agent, ExecutionContext context)
     {
         if (Entity is not Storehouse storehouse) return;
         

@@ -8,7 +8,7 @@ namespace VirtualVillage.Actions;
 
 public class ChopWoodAction : GoapAction
 {
-    public ChopWoodAction(Forest forest, float cost) : base("Chop Wood", cost, forest)
+    public ChopWoodAction(Forest forest, float cost, int duration) : base("Chop Wood", cost, duration, forest)
     {
         Tags.AddRange([Keys.AllJobs, Keys.Lumberjack]);
     }
@@ -34,7 +34,14 @@ public class ChopWoodAction : GoapAction
 
     public override bool CanExecute(World world, Agent agent) => Entity is Forest forest && forest.Wood >= 0;
     
-    public override void Execute(World world, Agent agent) 
+    public override void Execute(World world, Agent agent, ExecutionContext context) 
+    {
+        context.Tick();
+        if (context.Elapsed == Duration)
+            OnCompleted(world, agent);
+    }
+
+    public override void OnCompleted(World world, Agent agent)
     {
         if (Entity is not Forest forest) return;
 
@@ -45,4 +52,6 @@ public class ChopWoodAction : GoapAction
         else
             agent.Inventory[Keys.Wood] = 1;
     }
+
+    public override bool IsComplete(World world, Agent agent, ExecutionContext context) => context.Elapsed == Duration;
 }

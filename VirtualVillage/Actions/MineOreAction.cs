@@ -8,7 +8,7 @@ namespace VirtualVillage.Actions;
 
 public class MineOreAction : GoapAction
 {
-    public MineOreAction(Mine mine, float cost) : base("Mine Ore", cost, mine)
+    public MineOreAction(Mine mine, float cost, int duration) : base("Mine Ore", cost, duration, mine)
     {
         Tags.AddRange([Keys.AllJobs, Keys.Miner]);
     }
@@ -34,7 +34,7 @@ public class MineOreAction : GoapAction
 
     public override bool CanExecute(World world, Agent agent) => Entity is Mine mine && mine.Ore >= 0;
 
-    public override void Execute(World world, Agent agent)
+    public override void Execute(World world, Agent agent, ExecutionContext context)
     {
         if (Entity is not Mine mine) return;
 

@@ -8,7 +8,7 @@ public class ScavengeAction : GoapAction
 {
     private readonly string value;
 
-    public ScavengeAction(string value, string tag, float cost) : base($"Scavenge[{value}]", cost)
+    public ScavengeAction(string value, string tag, float cost, int duration) : base($"Scavenge[{value}]", cost, duration)
     {
         Tags.Add(tag);
         this.value = value;
@@ -21,7 +21,7 @@ public class ScavengeAction : GoapAction
         state.Inc(Agent.GetGenericStateKey(value), 1);
     }
 
-    public override void Execute(World world, Agent agent)
+    public override void Execute(World world, Agent agent, ExecutionContext context)
     {
         if (agent.Inventory.TryGetValue(value, out var resource))
             agent.Inventory[value] = resource + 1;

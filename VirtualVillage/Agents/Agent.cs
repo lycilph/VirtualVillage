@@ -52,7 +52,7 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
                 return;
             }
             else
-                Console.WriteLine("Could'nt find a plan for goal: " + goal.Name);
+                Console.WriteLine("Couldn't find a plan for goal: " + goal.Name);
         }
     }
 
@@ -79,10 +79,11 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
             return;
         }
 
-        action.Execute(world, this);
+        var ctx = action.GetContext();
+        action.Execute(world, this, ctx);
         Console.WriteLine($"{Name} executes {action.Name} at {Location}");
 
-        if (action.IsComplete(world, this))
+        if (action.IsComplete(world, this, ctx))
         {
             CurrentPlan.Dequeue();
         }

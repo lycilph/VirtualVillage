@@ -15,7 +15,7 @@ public class Forest : WorldObject<Forest>, IEntity
     {
         Wood = woodRemaining;
 
-        actions.Add(new ChopWoodAction(this, 5));
+        actions.Add(new ChopWoodAction(this, 5, 3));
     }
 
     public override void Update(WorldState state)

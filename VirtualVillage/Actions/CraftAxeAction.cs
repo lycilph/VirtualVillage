@@ -8,7 +8,7 @@ namespace VirtualVillage.Actions;
 
 public class CraftAxeAction : GoapAction
 {
-    public CraftAxeAction(Forge forge, float cost) : base("Craft Axe", cost, forge)
+    public CraftAxeAction(Forge forge, float cost, int duration) : base("Craft Axe", cost, duration, forge)
     {
         Tags.Add(Keys.Blacksmith);
     }
@@ -35,7 +35,7 @@ public class CraftAxeAction : GoapAction
         agent.Inventory.TryGetValue(Keys.Wood, out int wood) && wood > 0 &&
         agent.Inventory.TryGetValue(Keys.Ore, out int ore) && ore > 0;
 
-    public override void Execute(World world, Agent agent)
+    public override void Execute(World world, Agent agent, ExecutionContext context)
     {
         if (agent.Inventory.TryGetValue(Keys.Wood, out var wood))
             agent.Inventory[Keys.Wood] = wood - 1;

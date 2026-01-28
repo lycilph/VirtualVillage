@@ -10,7 +10,7 @@ public class PickupAction : GoapAction
 {
     private readonly string value;
     
-    public PickupAction(string value, float cost, IEntity entity) : base($"Pickup[{value}]", cost, entity)
+    public PickupAction(string value, float cost, int duration, IEntity entity) : base($"Pickup[{value}]", cost, duration, entity)
     {
         Tags.Add(Keys.AllJobs);
         this.value = value;
@@ -41,7 +41,7 @@ public class PickupAction : GoapAction
         return storehouse.Inventory.TryGetValue(value, out int resource) && resource > 0;
     }
 
-    public override void Execute(World world, Agent agent)
+    public override void Execute(World world, Agent agent, ExecutionContext context)
     {
         if (Entity is not Storehouse storehouse) return;
 

@@ -15,8 +15,8 @@ public class Storehouse : WorldObject<Storehouse>, IEntity
     {
         foreach (var item in Keys.Items)
         {
-            actions.Add(new DepositAction(item, 1, this));
-            actions.Add(new PickupAction(item, 1, this));
+            actions.Add(new DepositAction(item, 1, 1, this));
+            actions.Add(new PickupAction(item, 1, 1, this));
         }
     }
 

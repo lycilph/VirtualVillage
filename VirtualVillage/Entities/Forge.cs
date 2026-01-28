@@ -10,7 +10,7 @@ public class Forge : WorldObject<Forge>, IEntity
 
     public Forge(Location location) : base("Forge", location)
     {
-        actions.Add(new CraftAxeAction(this, 5));
+        actions.Add(new CraftAxeAction(this, 5, 5));
     }
 
     public override void Update(WorldState state) { }

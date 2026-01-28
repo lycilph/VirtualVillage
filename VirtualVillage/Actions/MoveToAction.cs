@@ -8,7 +8,7 @@ namespace VirtualVillage.Actions;
 
 public class MoveToAction : GoapAction
 {
-    public MoveToAction(IEntity entity, float cost) : base($"MoveTo{entity}", cost, entity)
+    public MoveToAction(IEntity entity, float cost) : base($"MoveTo{entity}", cost, 0, entity)
     {
         Tags.Add(Keys.AllJobs);
     }
@@ -27,12 +27,12 @@ public class MoveToAction : GoapAction
         state.Set(Agent.GetGenericStateKey(Keys.Location), Entity.Location);
     }
 
-    public override void Execute(World world, Agent agent)
+    public override void Execute(World world, Agent agent, ExecutionContext context)
     {
         if (Entity == null) return;
 
         agent.Location = agent.Location.StepTowards(Entity.Location);
     }
 
-    public override bool IsComplete(World world, Agent agent) => Entity?.Location.DistanceTo(agent.Location) == 0;
+    public override bool IsComplete(World world, Agent agent, ExecutionContext context) => Entity?.Location.DistanceTo(agent.Location) == 0;
 }

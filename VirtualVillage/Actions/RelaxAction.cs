@@ -6,7 +6,7 @@ namespace VirtualVillage.Actions;
 
 internal class RelaxAction : GoapAction
 {
-    public RelaxAction(float cost) : base("Relax", cost)
+    public RelaxAction(float cost, int duration) : base("Relax", cost, duration)
     {
         Tags.Add(Keys.AllJobs);
     }

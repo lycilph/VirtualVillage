@@ -15,7 +15,7 @@ public class Mine : WorldObject<Mine>, IEntity
     {
         Ore = oreRemaining;
 
-        actions.Add(new MineOreAction(this, 5));
+        actions.Add(new MineOreAction(this, 5, 5));
     }
 
     public override void Update(WorldState state)
