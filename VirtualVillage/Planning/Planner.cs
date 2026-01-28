@@ -1,5 +1,7 @@
 ﻿using VirtualVillage.Actions;
+using VirtualVillage.Agents;
 using VirtualVillage.Core;
+using VirtualVillage.Domain;
 using VirtualVillage.Goals;
 
 namespace VirtualVillage.Planning;
@@ -116,7 +118,7 @@ public class Planner
             return 0;
 
         var action_location = action.Entity.Location;
-        var agent_location = state.Get<Location>("agent_location");
+        var agent_location = state.Get<Location>(Agent.GetGenericStateKey(Keys.Location));
         return agent_location.DistanceTo(action_location);
     }
 
