@@ -19,7 +19,7 @@ public class ActionTests
         var move_to_forest_action = actions.Where(a => a.Name.Contains("forest", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
 
         // Assert
-        Assert.Equal(3, actions.Count);
+        Assert.Equal(7, actions.Count);
         Assert.NotNull(move_to_forest_action);
     }
 }

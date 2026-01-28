@@ -41,7 +41,7 @@ public class PickupAction : GoapAction
         return storehouse.Inventory.TryGetValue(value, out int resource) && resource > 0;
     }
 
-    public override void Execute(World world, Agent agent, ExecutionContext context)
+    public override void OnCompleted(World world, Agent agent)
     {
         if (Entity is not Storehouse storehouse) return;
 

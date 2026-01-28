@@ -36,7 +36,7 @@ public class DepositAction : GoapAction
 
     public override bool CanExecute(World world, Agent agent) => agent.Inventory.TryGetValue(value, out int resource) && resource > 0;
 
-    public override void Execute(World world, Agent agent, ExecutionContext context)
+    public override void OnCompleted(World world, Agent agent)
     {
         if (Entity is not Storehouse storehouse) return;
         

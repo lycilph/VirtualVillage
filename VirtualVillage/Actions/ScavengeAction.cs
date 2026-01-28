@@ -21,7 +21,7 @@ public class ScavengeAction : GoapAction
         state.Inc(Agent.GetGenericStateKey(value), 1);
     }
 
-    public override void Execute(World world, Agent agent, ExecutionContext context)
+    public override void OnCompleted(World world, Agent agent)
     {
         if (agent.Inventory.TryGetValue(value, out var resource))
             agent.Inventory[value] = resource + 1;

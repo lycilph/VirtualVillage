@@ -34,6 +34,7 @@ public static class GoalFactory
 
         return new Goal.Builder("Store Ore")
             .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey(Keys.Ore)) > ore)
+            .WithPriority(s => ore < 5 ? 100 : 0)
             .Build();
     }
 
@@ -49,6 +50,7 @@ public static class GoalFactory
 
         return new Goal.Builder("Store Axe")
             .WithDesiredState(s => s.Get<int>(storehouse.GetStateKey(Keys.Axe)) > axe)
+            .WithPriority(s => axe < 5 ? 100 : 0)
             .Build();
     }
 

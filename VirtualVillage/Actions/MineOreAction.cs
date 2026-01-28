@@ -34,7 +34,7 @@ public class MineOreAction : GoapAction
 
     public override bool CanExecute(World world, Agent agent) => Entity is Mine mine && mine.Ore >= 0;
 
-    public override void Execute(World world, Agent agent, ExecutionContext context)
+    public override void OnCompleted(World world, Agent agent)
     {
         if (Entity is not Mine mine) return;
 

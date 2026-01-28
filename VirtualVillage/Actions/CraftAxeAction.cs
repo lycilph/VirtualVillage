@@ -35,7 +35,7 @@ public class CraftAxeAction : GoapAction
         agent.Inventory.TryGetValue(Keys.Wood, out int wood) && wood > 0 &&
         agent.Inventory.TryGetValue(Keys.Ore, out int ore) && ore > 0;
 
-    public override void Execute(World world, Agent agent, ExecutionContext context)
+    public override void OnCompleted(World world, Agent agent)
     {
         if (agent.Inventory.TryGetValue(Keys.Wood, out var wood))
             agent.Inventory[Keys.Wood] = wood - 1;

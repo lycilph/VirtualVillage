@@ -27,12 +27,12 @@ public class MoveToAction : GoapAction
         state.Set(Agent.GetGenericStateKey(Keys.Location), Entity.Location);
     }
 
-    public override void Execute(World world, Agent agent, ExecutionContext context)
+    public override void Execute(World world, Agent agent, ActionContext context)
     {
         if (Entity == null) return;
 
         agent.Location = agent.Location.StepTowards(Entity.Location);
     }
 
-    public override bool IsComplete(World world, Agent agent, ExecutionContext context) => Entity?.Location.DistanceTo(agent.Location) == 0;
+    public override bool IsComplete(World world, Agent agent, ActionContext context) => Entity?.Location.DistanceTo(agent.Location) == 0;
 }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using VirtualVillage.Actions;
+﻿using VirtualVillage.Actions;
 using VirtualVillage.Core;
 using VirtualVillage.Domain;
 using VirtualVillage.Jobs;
@@ -14,6 +13,7 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
 
     public Queue<GoapAction> CurrentPlan { get; private set; } = new();
     public ExecutionState State { get; private set; } = ExecutionState.Idle;
+    public ActionContext? Context { get; private set; } = null;
 
     public override void Update(WorldState state)
     {
@@ -29,7 +29,8 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
     public override void Render()
     {
         var resources = string.Join(", ", Inventory.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
-        Console.WriteLine($"Agent {Name} {State} ({resources})");
+        var progress = Context == null ? "" : $"({Context.Elapsed} of {CurrentPlan.Peek().Duration})";
+        Console.WriteLine($"Agent {Name} {State} {progress} ({resources})");
     }
 
     public void Replan(World world)
@@ -49,6 +50,7 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
             {
                 CurrentPlan = new Queue<GoapAction>(plan);
                 State = ExecutionState.Executing;
+                Context = null;
                 return;
             }
             else
@@ -76,16 +78,19 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
         {
             State = ExecutionState.Failed;
             CurrentPlan.Clear();
+            Context = null;
             return;
         }
 
-        var ctx = action.GetContext();
-        action.Execute(world, this, ctx);
+        Context ??= action.GetContext();
+
+        action.Execute(world, this, Context);
         Console.WriteLine($"{Name} executes {action.Name} at {Location}");
 
-        if (action.IsComplete(world, this, ctx))
+        if (action.IsComplete(world, this, Context))
         {
             CurrentPlan.Dequeue();
+            Context = null;
         }
     }
 }

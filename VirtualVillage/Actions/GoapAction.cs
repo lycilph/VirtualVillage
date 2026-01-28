@@ -18,11 +18,16 @@ public abstract class GoapAction(string name, float cost, int duration, IEntity?
     public virtual void Effect(WorldState state) { }
 
     // Execution related methods
-    public ExecutionContext GetContext() => new(this);
+    public ActionContext GetContext() => new(this);
     public virtual bool CanExecute(World world, Agent agent) => true;
-    public virtual void Execute(World world, Agent agent, ExecutionContext context) { }
+    public virtual void Execute(World world, Agent agent, ActionContext context)
+    {
+        context.Tick();
+        if (context.Elapsed == Duration)
+            OnCompleted(world, agent);
+    }
     public virtual void OnCompleted(World world, Agent agent) { }
-    public virtual bool IsComplete(World world, Agent agent, ExecutionContext context) => true;
+    public virtual bool IsComplete(World world, Agent agent, ActionContext context) => context.Elapsed == Duration;
 
     public override string ToString() 
         => Entity is null ? 

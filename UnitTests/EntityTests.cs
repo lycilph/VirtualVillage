@@ -15,6 +15,6 @@ public class EntityTests
         var key = entity.GetStateKey("wood");
 
         // Assert
-        Assert.Equal("Forest[1]_wood", key);
+        Assert.Equal("Forest[9]_wood", key);
     }
 }

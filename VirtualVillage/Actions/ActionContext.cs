@@ -1,6 +1,6 @@
 ﻿namespace VirtualVillage.Actions;
 
-public sealed class ExecutionContext(GoapAction action)
+public sealed class ActionContext(GoapAction action)
 {
     public GoapAction Action { get; } = action;
     public float Elapsed { get; private set; } = 0f;
