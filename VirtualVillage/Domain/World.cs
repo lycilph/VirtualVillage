@@ -1,5 +1,4 @@
-﻿using System.Text;
-using VirtualVillage.Actions;
+﻿using VirtualVillage.Actions;
 using VirtualVillage.Entities;
 using VirtualVillage.Planning;
 
@@ -9,6 +8,8 @@ public class World
 {
     private readonly MovementProvider movementProvider;
     private readonly DefaultActionsProvider defaultActionsProvider;
+
+    //private readonly EntityProvider scavengelocationprovider;
 
     public List<IEntity> Entities { get; } = [];
     public List<Agent> Agents { get; } = [];
@@ -62,34 +63,4 @@ public class World
         foreach (var e in Events)
             Console.WriteLine(e);
     }
-
-    //public override string ToString()
-    //{
-    //    var sb = new StringBuilder();
-
-    //    sb.AppendLine("Agents");
-    //    foreach (var agent in Agents)
-    //        sb.AppendLine(" * " + agent.ToString());
-
-    //    sb.AppendLine("Entities");
-    //    foreach (var entity in Entities)
-    //    {
-    //        sb.AppendLine(" * " + entity.ToString());
-    //        var actions = entity.GetProvidedActions();
-    //        foreach (var action in actions)
-    //        {
-    //            sb.AppendLine(" * * " + action);
-    //        }
-    //    }
-
-    //    sb.AppendLine("Movement actions:");
-    //    foreach (var action in movementProvider.GetProvidedActions())
-    //        sb.AppendLine(" * " + action);
-
-    //    sb.AppendLine("Default actions:");
-    //    foreach (var action in defaultActionsProvider.GetProvidedActions())
-    //        sb.AppendLine(" * " + action);
-
-    //    return sb.ToString();
-    //}
 }

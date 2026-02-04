@@ -1,5 +1,4 @@
-﻿using System;
-using VirtualVillage.Actions;
+﻿using VirtualVillage.Actions;
 using VirtualVillage.Core;
 using VirtualVillage.Goals;
 using VirtualVillage.Jobs;
@@ -37,7 +36,7 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
         var action = CurrentAction != null ? $"Action: {CurrentAction.Name}" : "[No Action]";
         var progress = Context != null && CurrentAction != null ? $"{Context.Elapsed} of {CurrentAction.Duration}" : "";
         var inventory = string.Join(", ", Inventory.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
-        Console.WriteLine($"{info} {goal} {plan} {action} {progress} ({inventory})");
+        Console.WriteLine($"{info} {goal}, {plan}, {action}, {progress}, ({inventory})");
     }
 
     public void Replan(World world)
@@ -52,7 +51,7 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
         //var tracer = new MinimalConsolePlannerTracer();
         foreach (var goal in goals)
         {
-            var plan = Planner.Plan(state, actions, goal); //, tracer);
+            var plan = Planner.Plan(state, actions, goal);//, tracer);
             if (plan != null)
             {
                 CurrentGoal = goal;
@@ -75,12 +74,16 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
 
         if (CurrentAction == null && CurrentPlan.Count == 0)
         {
-            world.Events.Add($"{Name} replanned");
             Replan(world);
+            world.Events.Add($"{Name} replanned [New goal is {CurrentGoal?.Name}]");
         }
 
-        CurrentAction ??= CurrentPlan.Dequeue();
-        Context ??= CurrentAction.GetContext();
+        if (CurrentAction == null)
+        {
+            CurrentAction = CurrentPlan.Dequeue();
+            world.Events.Add($"{Name} started {CurrentAction.Name}");
+        }
+
 
         if (!CurrentAction.CanExecute(world, this))
         {
@@ -91,39 +94,7 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
             return;
         }
 
+        Context ??= CurrentAction.GetContext();
         CurrentAction.Execute(world, this, Context);
-
-        //if (State != ExecutionState.Executing)
-        //    Replan(world);
-
-        //if (State != ExecutionState.Executing)
-        //    return;
-
-        //if (CurrentPlan.Count == 0)
-        //{
-        //    State = ExecutionState.Idle;
-        //    return;
-        //}
-
-        //var action = CurrentPlan.Peek();
-
-        //if (!action.CanExecute(world, this))
-        //{
-        //    State = ExecutionState.Failed;
-        //    CurrentPlan.Clear();
-        //    Context = null;
-        //    return;
-        //}
-
-        //Context ??= action.GetContext();
-
-        //action.Execute(world, this, Context);
-        ////Console.WriteLine($"{Name} executes {action.Name} at {Location}");
-
-        //if (action.IsComplete(world, this, Context))
-        //{
-        //    CurrentPlan.Dequeue();
-        //    Context = null;
-        //}
     }
 }

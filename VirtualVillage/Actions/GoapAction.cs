@@ -9,7 +9,7 @@ public abstract class GoapAction(string name, float cost, int duration, IEntity?
 {
     public float Cost { get; } = cost;
     public int Duration { get; } = duration;
-    public IEntity? Entity { get; private set; } = entity;
+    public IEntity? Entity { get; protected set; } = entity;
     public HashSet<string> Tags { get; } = [];
 
     // Planning related methods

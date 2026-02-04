@@ -16,6 +16,8 @@ class Program
         var mine = new Mine(new Location(-5, 2), 10);
         var storehouse = new Storehouse(new Location(0, 1));
         var forge = new Forge(new Location(-2, -1));
+        var twigs = new ScavengeWoodLocation(Location.Random());
+        var nuggets = new ScavengeOreLocation(Location.Random());
 
         var world = new World();
         world.Agents.Add(lumberjack);
@@ -25,6 +27,8 @@ class Program
         world.Entities.Add(mine);
         world.Entities.Add(storehouse);
         world.Entities.Add(forge);
+        world.Entities.Add(twigs);
+        world.Entities.Add(nuggets);
 
         int iteration = 0;
         while (true)
