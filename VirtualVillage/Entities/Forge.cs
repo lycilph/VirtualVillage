@@ -1,5 +1,6 @@
 ﻿using VirtualVillage.Actions;
 using VirtualVillage.Core;
+using VirtualVillage.Domain;
 using VirtualVillage.Planning;
 
 namespace VirtualVillage.Entities;
@@ -12,6 +13,8 @@ public class Forge : WorldObject<Forge>, IEntity
     {
         actions.Add(new CraftAxeAction(this, 5, 5));
     }
+
+    public void Tick(World world) { }
 
     public override void Update(WorldState state) { }
     

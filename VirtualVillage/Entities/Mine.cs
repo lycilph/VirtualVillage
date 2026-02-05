@@ -18,6 +18,8 @@ public class Mine : WorldObject<Mine>, IEntity
         actions.Add(new MineOreAction(this, 5, 5));
     }
 
+    public void Tick(World world) { }
+
     public override void Update(WorldState state)
     {
         state[GetStateKey(Keys.Ore)] = Ore;

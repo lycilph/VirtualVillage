@@ -31,7 +31,7 @@ public class ChopWoodAction : GoapAction
         state.Dec(forest.GetStateKey(Keys.Wood), 1);
     }
 
-    public override bool CanExecute(World world, Agent agent) => Entity is Forest forest && forest.Wood >= 0;
+    public override bool CanExecute(World world, Agent agent) => Entity is Forest forest && forest.Wood > 0;
     
     public override void OnCompleted(World world, Agent agent)
     {

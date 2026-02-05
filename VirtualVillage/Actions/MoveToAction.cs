@@ -7,7 +7,7 @@ namespace VirtualVillage.Actions;
 
 public class MoveToAction : GoapAction
 {
-    public MoveToAction(IEntity entity, float cost) : base($"MoveTo{entity}", cost, 0, entity)
+    public MoveToAction(IEntity entity, float cost) : base($"MoveTo{entity.Name}[{entity.Id}]", cost, 0, entity)
     {
         Tags.Add(Keys.AllJobs);
     }

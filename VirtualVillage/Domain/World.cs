@@ -9,7 +9,6 @@ public class World
     private readonly MovementProvider movementProvider;
     private readonly DefaultActionsProvider defaultActionsProvider;
 
-    //private readonly EntityProvider scavengelocationprovider;
 
     public List<IEntity> Entities { get; } = [];
     public List<Agent> Agents { get; } = [];
@@ -45,8 +44,8 @@ public class World
         foreach (var agent in Agents)
             agent.Tick(this);
 
-        //foreach (var entity in Entities)
-        //    entity.Tick();
+        foreach (var entity in Entities)
+            entity.Tick(this);
     }
 
     public void Render()

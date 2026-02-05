@@ -31,7 +31,7 @@ public class MineOreAction : GoapAction
         state.Dec(mine.GetStateKey(Keys.Ore), 1);
     }
 
-    public override bool CanExecute(World world, Agent agent) => Entity is Mine mine && mine.Ore >= 0;
+    public override bool CanExecute(World world, Agent agent) => Entity is Mine mine && mine.Ore > 0;
 
     public override void OnCompleted(World world, Agent agent)
     {

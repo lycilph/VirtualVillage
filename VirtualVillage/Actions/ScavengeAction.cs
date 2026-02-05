@@ -18,6 +18,8 @@ public class ScavengeAction : GoapAction
     public override bool Precondition(WorldState state)
     {
         if (Entity == null) return false;
+        if (value.Equals(Keys.Wood) && Entity is ScavengeWoodLocation twigs && twigs.Amount == 0) return false;
+        if (value.Equals(Keys.Ore) && Entity is ScavengeOreLocation nuggets && nuggets.Amount == 0) return false;
 
         return state.Get<Location>(Agent.GetGenericStateKey(Keys.Location)).DistanceTo(Entity.Location) == 0;
     }

@@ -2,6 +2,8 @@
 
 public readonly record struct Location(int X, int Y)
 {
+    private static readonly Random rnd = new(DateTime.Now.Millisecond);
+
     public Location StepTowards(Location target)
     {
         int dx = Math.Sign(target.X - X);
@@ -21,7 +23,6 @@ public readonly record struct Location(int X, int Y)
 
     public static Location Random()
     {
-        var rnd = new Random(DateTime.Now.Millisecond);
         var x = rnd.Next(-5, 6); // Should give a number between -5 and 5 (inclusive)
         var y = rnd.Next(-5, 6); // Should give a number between -5 and 5 (inclusive)
         return new Location(x, y);

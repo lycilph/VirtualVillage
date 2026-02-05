@@ -18,6 +18,8 @@ public class Forest : WorldObject<Forest>, IEntity
         actions.Add(new ChopWoodAction(this, 5, 3));
     }
 
+    public void Tick(World world) {}
+
     public override void Update(WorldState state)
     {
         state[GetStateKey(Keys.Wood)] = Wood;

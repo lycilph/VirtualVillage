@@ -20,6 +20,8 @@ public class Storehouse : WorldObject<Storehouse>, IEntity
         }
     }
 
+    public void Tick(World world) { }
+
     public override void Update(WorldState state) 
     {
         foreach (var kvp in Inventory)
