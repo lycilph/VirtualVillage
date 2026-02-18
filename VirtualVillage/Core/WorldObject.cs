@@ -7,6 +7,7 @@ public abstract class WorldObject<T>(string name, Location location) : IWorldObj
     public int Id { get; } = IdGenerator.Next();
     public string Name { get; } = name;
     public Location Location { get; set;  } = location;
+    public int ReservedBy { get; set; } = -1; // -1 = unreserved
 
     public abstract void Update(WorldState state);
     public abstract void Render();

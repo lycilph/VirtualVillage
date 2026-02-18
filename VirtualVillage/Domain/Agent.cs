@@ -39,8 +39,31 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
         Console.WriteLine($"{info} {goal}, {plan}, {action}, {progress}, ({inventory})");
     }
 
+    public void ReserveEntities()
+    {
+        // Find and reserve the entities in the plan that needs to be reserved
+        CurrentPlan
+            .Where(a => a.Entity != null && a.Entity.MustBeReserved && a.Entity.ReservedBy == -1)
+            .Select(a => a.Entity)
+            .ToList()
+            .ForEach(a => a!.ReservedBy = Id);
+    }
+
+    public void ClearEntityReservations(World world)
+    {
+        // Reset all reservations by this agent (ie. reservedby == id)
+        world
+            .Entities
+            .Where(e => e.MustBeReserved && e.ReservedBy == Id)
+            .ToList()
+            .ForEach(e => e.ReservedBy = -1);
+    }
+
     public void Replan(World world)
     {
+        // This needs to be first, so that the reserved entities are available when gathering the actions below
+        ClearEntityReservations(world);
+
         var state = world.GetWorldState(this);
         var actions = world.GetActions().Where(Job.AllowsAction).ToList();
         var goals = Job.GetGoals(world, this)
@@ -58,6 +81,10 @@ public class Agent(string name, Job job, Location location) : WorldObject<Agent>
                 CurrentPlan = new Queue<GoapAction>(plan);
                 CurrentAction = null;
                 Context = null;
+
+                // Reserve resource locations here
+                ReserveEntities();
+
                 return;
             }
         }

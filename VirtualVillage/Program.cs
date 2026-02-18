@@ -9,7 +9,8 @@ class Program
 {
     static void Main()
     {
-        var lumberjack = new Agent("Bjorn", new LumberjackJob(), new Location(0, 0));
+        var lumberjack1 = new Agent("Bjorn", new LumberjackJob(), new Location(0, 0));
+        var lumberjack2 = new Agent("Beiner", new LumberjackJob(), new Location(0, 5));
         var miner = new Agent("Borin", new MinerJob(), new Location(0, 0));
         var blacksmith = new Agent("Magnus", new BlacksmithJob(), new Location(0, 0));
         var forest = new Forest(new Location(5, 5), 5);
@@ -20,7 +21,8 @@ class Program
         var nuggets = new ScavengeOreLocation(Location.Random());
 
         var world = new World();
-        world.Agents.Add(lumberjack);
+        world.Agents.Add(lumberjack1);
+        world.Agents.Add(lumberjack2);
         world.Agents.Add(miner);
         world.Agents.Add(blacksmith);
         world.Entities.Add(forest);

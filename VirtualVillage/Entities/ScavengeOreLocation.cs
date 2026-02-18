@@ -7,13 +7,14 @@ namespace VirtualVillage.Entities;
 
 public class ScavengeOreLocation : WorldObject<ScavengeOreLocation>, IEntity
 {
+    public bool MustBeReserved { get; } = true;
     public int Amount { get; set; } = 1;
-    
-    private readonly List<GoapAction> actions = [];
+
+    private readonly GoapAction collectNuggetsAction;
 
     public ScavengeOreLocation(Location location) : base("Nugget", location)
     {
-        actions.Add(new ScavengeAction(Keys.Ore, Keys.Miner, 50, 20, this));
+        collectNuggetsAction = new ScavengeAction(Keys.Ore, Keys.Miner, 50, 20, this);
     }
 
     public void Tick(World world)
@@ -33,6 +34,6 @@ public class ScavengeOreLocation : WorldObject<ScavengeOreLocation>, IEntity
 
     public override void Render() => Console.WriteLine($"{Name} @ {Location} (remaining: {Amount})");
 
-    public IEnumerable<GoapAction> GetProvidedActions() => actions;
+    public IEnumerable<GoapAction> GetProvidedActions() => ReservedBy == -1 ? [collectNuggetsAction] : [];
 
 }

@@ -7,15 +7,16 @@ namespace VirtualVillage.Entities;
 
 public class Mine : WorldObject<Mine>, IEntity
 {
+    public bool MustBeReserved { get; } = true;
     public int Ore { get; set; }
 
-    private readonly List<GoapAction> actions = [];
+    private readonly GoapAction mineAction;
 
     public Mine(Location location, int oreRemaining) : base("Mine", location)
     {
         Ore = oreRemaining;
 
-        actions.Add(new MineOreAction(this, 5, 5));
+        mineAction = new MineOreAction(this, 5, 5);
     }
 
     public void Tick(World world) { }
@@ -27,5 +28,5 @@ public class Mine : WorldObject<Mine>, IEntity
 
     public override void Render() => Console.WriteLine($"Mine @ {Location} (remaining ore: {Ore})");
 
-    public IEnumerable<GoapAction> GetProvidedActions() => actions;
+    public IEnumerable<GoapAction> GetProvidedActions() => ReservedBy == -1 ? [mineAction] : [];
 }

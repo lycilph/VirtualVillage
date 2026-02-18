@@ -7,13 +7,14 @@ namespace VirtualVillage.Entities;
 
 public class ScavengeWoodLocation : WorldObject<ScavengeWoodLocation>, IEntity
 {
+    public bool MustBeReserved { get; } = true;
     public int Amount { get; set; } = 1;
-    
-    private readonly List<GoapAction> actions = [];
+
+    private readonly GoapAction collectTwigsAction;
 
     public ScavengeWoodLocation(Location location) : base("Twigs", location)
     {
-        actions.Add(new ScavengeAction(Keys.Wood, Keys.Lumberjack, 50, 20, this));
+        collectTwigsAction = new ScavengeAction(Keys.Wood, Keys.Lumberjack, 50, 20, this);
     }
 
     public void Tick(World world)
@@ -31,7 +32,7 @@ public class ScavengeWoodLocation : WorldObject<ScavengeWoodLocation>, IEntity
         state[GetStateKey(Keys.Wood)] = Amount;
     }
 
-    public override void Render() => Console.WriteLine($"{Name} @ {Location} (remaining: {Amount})");
+    public override void Render() => Console.WriteLine($"{Name} @ {Location} (remaining: {Amount}, reserved by: {ReservedBy})");
 
-    public IEnumerable<GoapAction> GetProvidedActions() => actions;
+    public IEnumerable<GoapAction> GetProvidedActions() => ReservedBy == -1 ? [collectTwigsAction] : [];
 }

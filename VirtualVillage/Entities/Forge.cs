@@ -7,6 +7,8 @@ namespace VirtualVillage.Entities;
 
 public class Forge : WorldObject<Forge>, IEntity
 {
+    public bool MustBeReserved { get; } = false;
+
     private readonly List<GoapAction> actions = [];
 
     public Forge(Location location) : base("Forge", location)

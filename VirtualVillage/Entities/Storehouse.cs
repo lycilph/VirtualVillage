@@ -7,6 +7,7 @@ namespace VirtualVillage.Entities;
 
 public class Storehouse : WorldObject<Storehouse>, IEntity
 {
+    public bool MustBeReserved { get; } = false;
     public Dictionary<string, int> Inventory { get; } = [];
 
     private readonly List<GoapAction> actions = [];
