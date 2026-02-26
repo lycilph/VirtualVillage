@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VirtualVillage\VirtualVillage.csproj" />
+    <ProjectReference Include="..\VirtualVillageV1\VirtualVillageV1.csproj" />
   </ItemGroup>
 
   <ItemGroup>

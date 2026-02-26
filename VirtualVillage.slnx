@@ -1,4 +1,6 @@
 <Solution>
   <Project Path="UnitTests/UnitTests.csproj" Id="b863f526-7d9c-4d16-861e-7eeab22be141" />
-  <Project Path="VirtualVillage/VirtualVillage.csproj" Id="a1e0a300-1375-4e15-9760-3ccfabb53859" />
+  <Project Path="VirtualVillageConsole/VirtualVillageConsole.csproj" Id="22852944-3f61-40fb-ab2f-db96bd7327e3" />
+  <Project Path="VirtualVillageV1/VirtualVillageV1.csproj" />
+  <Project Path="VirtualVillageWPF/VirtualVillageWPF.csproj" Id="fb1a7531-1c43-48a9-9230-7a8514af2cec" />
 </Solution>

@@ -73,6 +73,22 @@ public class WorldState : Dictionary<string, object>
         return true;
     }
 
+    /* Possibly better version!
+     * public override bool Equals(object? obj)
+{
+    if (ReferenceEquals(this, obj)) return true;
+    if (obj is not WorldState other || Count != other.Count) return false;
+
+    foreach (var (key, value) in this)
+    {
+        if (!other.TryGetValue(key, out var otherValue) || !object.Equals(value, otherValue))
+        {
+            return false;
+        }
+    }
+    return true;
+}*/
+
     public override string ToString()
     {
         var sb = new StringBuilder();
